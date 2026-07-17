@@ -1,0 +1,8 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Redirecting…</title></head><body>
+<script>
+// Legacy deep-link stub: old per-deck pages now live inside the app.
+var h = location.hash.replace('#','');
+var mode = (h === 'quiz' || h === 'speed') ? '/' + h : '';
+location.replace('index.html#/deck/sql' + mode);
+</script>
+</body></html>

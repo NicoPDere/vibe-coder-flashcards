@@ -1,0 +1,161 @@
+/* ============ tokens + reset + typography ============ */
+:root{
+  --bg:#0e0f16;
+  --bg-elev:#151726;
+  --card:#1a1d2e;
+  --card-2:#20243a;
+  --text:#eef0fa;
+  --dim:#9aa1ba;
+  --muted:#5d6379;
+  --border:rgba(255,255,255,.08);
+  --glass:rgba(255,255,255,.05);
+
+  --pink:#ff7ac8;
+  --violet:#9d7bff;
+  --cyan:#57c7ff;
+  --green:#4dd08c;
+  --yellow:#ffd93d;
+  --orange:#ff9f43;
+  --red:#ff5c72;
+
+  --grad-app:linear-gradient(135deg,#ff7ac8,#9d7bff 55%,#57c7ff);
+  --radius:18px;
+  --radius-sm:12px;
+
+  --font-display:'Space Grotesk','DM Sans',system-ui,sans-serif;
+  --font-body:'DM Sans',system-ui,-apple-system,sans-serif;
+  --font-mono:'JetBrains Mono','Courier Prime','Courier New',monospace;
+
+  --hud-h:58px;
+  --tab-h:60px;
+  --sat:env(safe-area-inset-top,0px);
+  --sab:env(safe-area-inset-bottom,0px);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+/* App-shell scroll model: the root never scrolls; #app is the scroll container.
+   Keeps fixed chrome rock-solid and avoids iOS URL-bar resize jumps. */
+html,body{height:100%;overflow:hidden}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--font-body);
+  line-height:1.45;
+}
+/* ambient glow + grain */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  transform:translateZ(0);
+  background:
+    radial-gradient(ellipse 60% 45% at 18% 8%,rgba(157,123,255,.10),transparent 60%),
+    radial-gradient(ellipse 55% 40% at 85% 20%,rgba(255,122,200,.07),transparent 60%),
+    radial-gradient(ellipse 70% 50% at 50% 100%,rgba(87,199,255,.06),transparent 65%);
+}
+body::after{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;
+  transform:translateZ(0);
+  background-image:url("data:image/svg+xml,%3Csvg width='180' height='180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+}
+
+h1,h2,h3{font-family:var(--font-display);letter-spacing:-.02em}
+code{font-family:var(--font-mono);font-size:.86em}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;color:inherit;background:none;border:none;cursor:pointer;font-size:inherit}
+input,textarea{font-family:inherit;color:inherit}
+::selection{background:rgba(157,123,255,.4)}
+
+.ic{width:22px;height:22px;flex:none}
+.dim{color:var(--dim);font-weight:400}
+.hidden{display:none !important}
+
+/* app layout: fixed HUD above, fixed tabbar below, #app scrolls between */
+#app{
+  position:fixed;inset:0;z-index:1;
+  overflow-y:auto;overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior-y:contain;
+}
+#app > .screen{
+  max-width:760px;margin:0 auto;
+  padding:calc(var(--hud-h) + var(--sat) + 10px) 18px calc(var(--tab-h) + var(--sab) + 26px);
+}
+body.in-game #app{overflow:hidden}
+body.in-game #app > .screen{padding:0;max-width:none}
+body.in-game #chrome{display:none}
+
+.screen{animation:fadeUp .32s ease both}
+.screen-title{font-size:28px;margin:8px 0 18px}
+.section-title{font-size:19px;margin:26px 0 12px;display:flex;align-items:center;gap:9px}
+.section-title::before{content:'';width:4px;height:17px;border-radius:2px;background:var(--grad-app);flex:none}
+
+/* scrollbar (desktop) */
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:5px;border:2px solid var(--bg)}
+::-webkit-scrollbar-track{background:transparent}
+
+:focus-visible{outline:2px solid var(--violet);outline-offset:2px;border-radius:6px}
+
+/* ============ keyframes ============ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes popIn{from{opacity:0;transform:scale(.86)}to{opacity:1;transform:scale(1)}}
+@keyframes shakeX{10%,90%{transform:translateX(-2px)}20%,80%{transform:translateX(4px)}30%,50%,70%{transform:translateX(-6px)}40%,60%{transform:translateX(6px)}}
+@keyframes bounceUp{0%{transform:scale(1)}35%{transform:scale(1.08)}100%{transform:scale(1)}}
+@keyframes floatUp{0%{opacity:0;transform:translate(-50%,4px) scale(.9)}15%{opacity:1}100%{opacity:0;transform:translate(-50%,-56px) scale(1.06)}}
+@keyframes pulseBar{0%{filter:brightness(1)}40%{filter:brightness(1.7)}100%{filter:brightness(1)}}
+@keyframes wobble{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(3deg) translateY(-2px)}}
+
+.pop-in{animation:popIn .3s cubic-bezier(.2,1.4,.4,1) both}
+.shake{animation:shakeX .45s ease both}
+.bounce{animation:bounceUp .4s ease both}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
+}
+
+/* ============ navigation transitions (camera push/pull) ============ */
+/* push: moving INTO a course/game — everything scales up, old view flies past.
+   pop: leaving a session — camera pulls back out. fade: same-level tab hops. */
+@media not (prefers-reduced-motion: reduce){
+  ::view-transition-old(root),::view-transition-new(root){
+    animation-duration:.22s;
+    animation-timing-function:cubic-bezier(.3,.75,.3,1);
+    animation-fill-mode:both;
+  }
+  html[data-nav="push"]::view-transition-old(root){animation-name:vt-push-old}
+  html[data-nav="push"]::view-transition-new(root){animation-name:vt-push-new;animation-duration:.44s;animation-timing-function:cubic-bezier(.3,.6,.3,1)}
+  html[data-nav="pop"]::view-transition-old(root){animation-name:vt-pop-old}
+  html[data-nav="pop"]::view-transition-new(root){animation-name:vt-pop-new;animation-duration:.44s;animation-timing-function:cubic-bezier(.3,.6,.3,1)}
+  html[data-nav="fade"]::view-transition-old(root){animation-name:vt-fade-old}
+  html[data-nav="fade"]::view-transition-new(root){animation-name:vt-fade-new;animation-duration:.3s}
+}
+/* entrances overshoot then settle — the bounce lives in the keyframes so
+   opacity can land early while scale keeps springing */
+@keyframes vt-push-old{from{opacity:1;transform:scale(1)}to{opacity:0;transform:scale(1.1)}}
+@keyframes vt-push-new{
+  0%{opacity:0;transform:scale(.85)}
+  45%{opacity:1}
+  60%{transform:scale(1.035)}
+  80%{transform:scale(.992)}
+  100%{opacity:1;transform:scale(1)}
+}
+@keyframes vt-pop-old{from{opacity:1;transform:scale(1)}to{opacity:0;transform:scale(.9)}}
+@keyframes vt-pop-new{
+  0%{opacity:0;transform:scale(1.14)}
+  45%{opacity:1}
+  60%{transform:scale(.975)}
+  82%{transform:scale(1.008)}
+  100%{opacity:1;transform:scale(1)}
+}
+@keyframes vt-fade-old{from{opacity:1}to{opacity:0}}
+@keyframes vt-fade-new{
+  0%{opacity:0;transform:translateY(14px) scale(.99)}
+  60%{opacity:1;transform:translateY(-2px) scale(1)}
+  100%{opacity:1;transform:none}
+}
+
+/* When View Transitions drive the swap, element-level entrances would double
+   the motion — hand it all to the VT layer on supporting browsers. */
+@supports (view-transition-name: none){
+  #app > .screen{animation:none}
+  .game-screen{animation:none}
+}

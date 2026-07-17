@@ -1,0 +1,444 @@
+/* ============ chrome: HUD + tab bar ============ */
+.hud{
+  position:fixed;top:0;left:0;right:0;z-index:40;
+  height:calc(var(--hud-h) + var(--sat));
+  padding:calc(var(--sat) + 8px) 16px 8px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  background:rgba(14,15,22,.78);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+}
+@supports not (backdrop-filter:blur(1px)){.hud{background:rgba(14,15,22,.96)}}
+.hud-level{display:flex;align-items:center;gap:10px;min-width:0;flex:1}
+.level-badge{
+  width:38px;height:38px;flex:none;border-radius:12px;
+  display:grid;place-items:center;
+  font-family:var(--font-display);font-weight:700;font-size:16px;color:#fff;
+  background:var(--grad-app);
+  box-shadow:0 2px 12px rgba(157,123,255,.45);
+}
+.hud-level-text{min-width:0;flex:1;max-width:280px}
+.hud-title{font-size:11.5px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:4px}
+.xp-bar{height:7px;border-radius:4px;background:rgba(255,255,255,.08);overflow:hidden}
+.xp-fill{height:100%;border-radius:4px;background:var(--grad-app);transition:width .5s cubic-bezier(.2,.9,.3,1)}
+.xp-fill.pulse{animation:pulseBar .6s ease}
+.hud-streak{
+  display:flex;align-items:center;gap:5px;
+  font-family:var(--font-display);font-weight:700;font-size:16px;
+  color:var(--muted);padding:6px 12px;border-radius:12px;
+  background:var(--glass);border:1px solid var(--border);
+}
+.hud-streak.lit{color:var(--orange);border-color:rgba(255,159,67,.35);background:rgba(255,159,67,.1)}
+.hud-streak .ic{width:18px;height:18px}
+
+.tabbar{
+  position:fixed;bottom:0;left:0;right:0;z-index:40;
+  height:calc(var(--tab-h) + var(--sab));
+  padding:6px 10px calc(var(--sab) + 4px);
+  display:flex;justify-content:space-around;align-items:center;
+  background:rgba(14,15,22,.82);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-top:1px solid var(--border);
+}
+@supports not (backdrop-filter:blur(1px)){.tabbar{background:rgba(14,15,22,.97)}}
+.tabbar a{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  font-size:10.5px;font-weight:600;letter-spacing:.02em;
+  color:var(--muted);padding:4px 18px;border-radius:12px;
+  transition:color .2s;
+}
+.tabbar a .ic{transition:transform .18s cubic-bezier(.3,1.6,.4,1)}
+.tabbar a:active .ic{transform:scale(.8)}
+.tabbar a.active{color:var(--text)}
+.tabbar a.active .ic{color:var(--violet);filter:drop-shadow(0 0 8px rgba(157,123,255,.7));transform:translateY(-1px)}
+
+/* ============ buttons ============ */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:12px 22px;border-radius:14px;
+  font-weight:600;font-size:14.5px;
+  background:var(--glass);border:1px solid var(--border);color:var(--text);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.07);
+  transition:transform .15s,box-shadow .2s,background .2s;
+}
+.btn:active{transform:scale(.96)}
+.btn.primary{
+  background:var(--grad-app);border:none;color:#fff;
+  box-shadow:0 4px 18px rgba(157,123,255,.4);
+}
+.btn.primary:hover{box-shadow:0 6px 24px rgba(157,123,255,.55)}
+.btn.danger{background:rgba(255,92,114,.12);border-color:rgba(255,92,114,.4);color:var(--red)}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap}
+.ghost-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  color:var(--dim);padding:8px;border-radius:10px;
+  transition:background .15s,color .15s;font-size:13px;font-weight:600;
+}
+.ghost-btn:hover{background:var(--glass);color:var(--text)}
+.round-btn{
+  width:60px;height:60px;border-radius:50%;
+  display:grid;place-items:center;
+  background:var(--card);border:1px solid var(--border);
+  box-shadow:0 4px 14px rgba(0,0,0,.4);
+  transition:transform .15s;
+}
+.round-btn:active{transform:scale(.9)}
+.round-btn .ic{width:26px;height:26px}
+.btn-know{color:var(--green);border-color:rgba(77,208,140,.4)}
+.btn-again{color:var(--red);border-color:rgba(255,92,114,.4)}
+.btn-undo{color:var(--dim);width:48px;height:48px}
+
+/* ============ pills, chips ============ */
+.pill{
+  padding:7px 14px;border-radius:999px;font-size:12.5px;font-weight:600;
+  background:var(--glass);border:1px solid var(--border);color:var(--dim);
+  transition:all .18s cubic-bezier(.3,1.3,.4,1);white-space:nowrap;
+}
+.pill.active{color:var(--text)}
+.pill:active{transform:scale(.92)}
+.cat-chip{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
+  color:var(--dim);
+}
+.cat-dot{width:7px;height:7px;border-radius:50%;flex:none}
+.due-pill{
+  display:inline-block;padding:2px 8px;border-radius:999px;
+  font-size:10.5px;font-weight:700;
+  background:rgba(255,159,67,.15);color:var(--orange);
+  border:1px solid rgba(255,159,67,.3);
+}
+.tier-pip{width:8px;height:8px;border-radius:50%;flex:none}
+
+/* ============ panels ============ */
+.panel{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:18px;box-shadow:0 2px 12px rgba(0,0,0,.25);
+}
+.bar{height:8px;border-radius:4px;background:rgba(255,255,255,.07);overflow:hidden;flex:1}
+.bar-fill{height:100%;border-radius:4px;transition:width .6s cubic-bezier(.2,.9,.3,1)}
+
+/* ============ flashcards (browse) ============ */
+.card-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));
+  gap:14px;margin-top:14px;
+}
+.fcard-wrap{perspective:1200px;animation:fadeUp .4s ease both}
+.fcard{
+  position:relative;min-height:220px;height:100%;
+  transform-style:preserve-3d;transition:transform .55s cubic-bezier(.3,.9,.35,1);
+  cursor:pointer;
+}
+.fcard.flipped{transform:rotateY(180deg)}
+.fcard-face{
+  position:absolute;inset:0;
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:18px;display:flex;flex-direction:column;
+  box-shadow:0 3px 14px rgba(0,0,0,.3);
+  transition:border-color .2s,box-shadow .2s;
+}
+.fcard:hover .fcard-face{border-color:rgba(255,255,255,.16);box-shadow:0 8px 26px rgba(0,0,0,.45)}
+.fcard-back{transform:rotateY(180deg);background:var(--card-2)}
+.fcard-top{display:flex;justify-content:space-between;gap:10px;margin-bottom:10px}
+.fcard-meta{min-width:0}
+.fcard-name{
+  font-family:var(--font-mono);font-weight:700;font-size:17.5px;
+  margin-top:6px;word-break:break-word;
+}
+.fcard-visual{width:64px;height:64px;flex:none;opacity:.9}
+.fcard-visual svg{width:100%;height:100%}
+.fcard-desc{font-size:13.5px;color:var(--dim);flex:1}
+.fcard-foot{display:flex;align-items:center;gap:8px;margin-top:12px}
+.fcard-hint{font-size:11px;color:var(--muted);flex:1}
+.back-label{
+  font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--violet);margin-bottom:8px;
+}
+.prompt-text{
+  font-size:14.5px;line-height:1.5;color:var(--text);
+  font-style:italic;flex:1;
+}
+.code-row{
+  background:rgba(0,0,0,.32);border:1px solid var(--border);border-radius:10px;
+  padding:10px 12px;margin-top:10px;overflow-x:auto;
+}
+.code-row code{white-space:pre;font-size:12px;color:var(--cyan)}
+.copy-btn.copied,.copy-btn.copied span{color:var(--green)}
+.no-results{color:var(--muted);padding:40px 0;text-align:center;grid-column:1/-1}
+
+/* ============ zoom modal ============ */
+.zoom-overlay{
+  position:fixed;inset:0;z-index:70;
+  background:rgba(8,9,14,.75);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  display:flex;align-items:center;justify-content:center;padding:18px;
+  opacity:0;transition:opacity .25s;overflow-y:auto;
+}
+.zoom-overlay.show{opacity:1}
+.zoom-card{
+  position:relative;width:100%;max-width:480px;max-height:calc(100dvh - 40px);overflow-y:auto;
+  background:var(--card);border:1px solid var(--border);border-radius:22px;
+  padding:26px;display:flex;flex-direction:column;gap:12px;
+  box-shadow:0 20px 60px rgba(0,0,0,.6),0 0 40px color-mix(in srgb,var(--accent,#9d7bff) 12%,transparent);
+  transform:scale(.86);transition:transform .34s cubic-bezier(.25,1.5,.4,1);
+}
+.zoom-overlay.show .zoom-card{transform:scale(1)}
+.zoom-close{position:absolute;top:12px;right:12px}
+.zoom-visual{width:96px;height:96px;margin:0 auto}
+.zoom-visual svg{width:100%;height:100%}
+.zoom-card h2{font-family:var(--font-mono);font-size:24px}
+.zoom-desc{color:var(--dim);font-size:15px}
+.zoom-block{background:rgba(0,0,0,.2);border-radius:14px;padding:14px}
+.zoom-block .code-row{margin-top:0;background:rgba(0,0,0,.3)}
+.copy-big{margin-top:6px}
+
+/* ============ deck tiles (home) ============ */
+.deck-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:13px}
+.deck-tile{
+  position:relative;overflow:hidden;
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:16px;display:block;
+  transition:transform .2s,border-color .2s,box-shadow .25s;
+  animation:fadeUp .45s ease both;
+}
+.deck-tile:hover{
+  transform:translateY(-3px);
+  border-color:color-mix(in srgb,var(--c1) 45%,transparent);
+  box-shadow:0 10px 28px rgba(0,0,0,.4),0 0 24px color-mix(in srgb,var(--c1) 14%,transparent);
+}
+.deck-tile:active{transform:scale(.965);transition-duration:.1s}
+.deck-tile-glow{
+  position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--c1),var(--c2));opacity:.75;
+}
+.deck-tile-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+.deck-icon{
+  width:52px;height:52px;padding:8px;border-radius:15px;
+  background:color-mix(in srgb,var(--c1) 11%,transparent);
+  border:1px solid color-mix(in srgb,var(--c1) 22%,transparent);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
+}
+.deck-icon svg{width:100%;height:100%}
+.deck-tile-name{font-family:var(--font-mono);font-weight:700;font-size:17px}
+.deck-tile-sub{font-size:12px;color:var(--dim);margin-top:3px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.ring-label{fill:var(--text);font-family:var(--font-display);font-weight:700;font-size:11px}
+
+/* ============ switches ============ */
+.switch{
+  width:52px;height:30px;border-radius:999px;flex:none;
+  background:rgba(255,255,255,.1);border:1px solid var(--border);
+  position:relative;transition:background .2s;
+}
+.switch .knob{
+  position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;
+  background:#fff;opacity:.85;transition:transform .2s cubic-bezier(.2,1.3,.4,1);
+}
+.switch.on{background:var(--violet)}
+.switch.on .knob{transform:translateX(22px);opacity:1}
+
+/* ============ toasts + xp float ============ */
+#toasts{
+  position:fixed;bottom:calc(var(--tab-h) + var(--sab) + 14px);left:50%;transform:translateX(-50%);
+  z-index:90;display:flex;flex-direction:column;gap:8px;align-items:center;
+  width:max-content;max-width:92vw;pointer-events:none;
+}
+body.in-game #toasts{bottom:calc(var(--sab) + 20px)}
+.toast{
+  display:flex;align-items:center;gap:8px;
+  background:var(--card-2);border:1px solid var(--border);border-radius:14px;
+  padding:11px 18px;font-size:13.5px;
+  box-shadow:0 8px 26px rgba(0,0,0,.5);
+  opacity:0;transform:translateY(14px) scale(.94);transition:all .35s cubic-bezier(.25,1.5,.4,1);
+}
+.toast.show{opacity:1;transform:none}
+.toast .ic{width:18px;height:18px;color:var(--orange)}
+.toast-bad{border-color:rgba(255,92,114,.4)}
+.xp-float{
+  position:fixed;z-index:95;pointer-events:none;
+  font-family:var(--font-display);font-weight:700;font-size:15px;color:var(--yellow);
+  text-shadow:0 0 12px rgba(255,217,61,.6);
+  animation:floatUp 1.15s ease-out both;
+}
+
+/* ============ big modals (level up / badge) ============ */
+.big-modal-overlay{
+  position:fixed;inset:0;z-index:80;
+  background:rgba(8,9,14,.8);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  display:flex;align-items:center;justify-content:center;padding:24px;
+  opacity:0;transition:opacity .24s;
+}
+.big-modal-overlay.show{opacity:1}
+.big-modal{
+  text-align:center;max-width:340px;width:100%;
+  background:var(--card);border:1px solid var(--border);border-radius:24px;
+  padding:30px 24px;display:flex;flex-direction:column;align-items:center;gap:8px;
+  box-shadow:0 24px 70px rgba(0,0,0,.6);
+  transform:scale(.8);transition:transform .38s cubic-bezier(.25,1.55,.4,1);
+}
+.big-modal-overlay.show .big-modal{transform:scale(1)}
+.levelup-kicker{
+  font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--violet);
+}
+.levelup-num{
+  font-family:var(--font-display);font-weight:700;font-size:64px;line-height:1;
+  background:var(--grad-app);-webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.levelup-title{font-family:var(--font-display);font-size:20px;font-weight:600}
+.big-modal .btn{margin-top:12px;width:100%}
+.badge-art{
+  width:84px;height:84px;border-radius:24px;display:grid;place-items:center;
+  background:var(--glass);border:1px solid var(--border);color:var(--muted);
+}
+.badge-art svg{width:52px;height:52px}
+.badge-art.unlocked{
+  color:var(--yellow);
+  background:linear-gradient(135deg,rgba(255,217,61,.14),rgba(255,159,67,.1));
+  border-color:rgba(255,217,61,.4);
+  box-shadow:0 0 30px rgba(255,217,61,.25);
+}
+.badge-name{font-family:var(--font-display);font-size:21px;font-weight:700}
+.badge-desc{font-size:13.5px;color:var(--dim)}
+.res-xp{
+  font-family:var(--font-display);font-weight:700;font-size:17px;color:var(--yellow);
+  text-shadow:0 0 14px rgba(255,217,61,.4);
+}
+
+/* ============ mascot ============ */
+/* Grounded physics: the body squashes/stretches from its feet (origin bottom
+   center) and a ground shadow scales inversely with height — that contrast is
+   what makes the jumps read as gravity rather than floating. */
+.mascot-wrap{display:inline-block;line-height:0}
+.mascot{filter:drop-shadow(0 6px 16px rgba(157,123,255,.35));overflow:visible}
+.mascot *{transform-box:fill-box}
+
+/* idle life: breathing, blink, antenna sway, bulb glow */
+.mascot .m-body{animation:m-breathe 3.2s ease-in-out infinite;transform-origin:50% 100%}
+.mascot .m-shadow{animation:m-shadow-breathe 3.2s ease-in-out infinite;transform-origin:center}
+.mascot .m-eyes{animation:m-blink 4.6s infinite;transform-origin:center}
+.mascot .m-antenna{animation:m-sway 3.2s ease-in-out infinite;transform-origin:50% 100%}
+.mascot .m-ball{animation:m-glow 2.2s ease-in-out infinite;transform-origin:center}
+.mascot .m-spark{opacity:0}
+
+/* moods */
+.mascot.mood-happy .m-spark{animation:m-twinkle 2.8s ease-in-out infinite;transform-origin:center}
+.mascot.mood-hype .m-body{animation:m-bounce 1.05s cubic-bezier(.35,0,.35,1) infinite}
+.mascot.mood-hype .m-shadow{animation:m-shadow-bounce 1.05s cubic-bezier(.35,0,.35,1) infinite}
+.mascot.mood-hype .m-eyes{animation:m-star-pulse 1.05s ease-in-out infinite}
+.mascot.mood-hype .m-spark{animation:m-twinkle 1.3s ease-in-out infinite;transform-origin:center}
+.mascot.mood-sad .m-body{animation:m-breathe 5.5s ease-in-out infinite;rotate:-2deg}
+.mascot.mood-sad .m-shadow{animation:m-shadow-breathe 5.5s ease-in-out infinite}
+.mascot.mood-sad .m-antenna{animation:none;transform:rotate(14deg)}
+.mascot.mood-sad .m-eyes{animation:m-blink 7s infinite;transform-origin:center}
+.mascot.mood-sad .m-ball{animation:none;opacity:.55}
+
+@keyframes m-breathe{0%,100%{transform:scale(1,1)}50%{transform:scale(1.015,.972)}}
+@keyframes m-shadow-breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
+@keyframes m-blink{0%,92%,100%{transform:scaleY(1)}95%,97%{transform:scaleY(.08)}}
+@keyframes m-sway{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(7deg)}}
+@keyframes m-glow{0%,100%{opacity:.75;transform:scale(1)}50%{opacity:1;transform:scale(1.25)}}
+@keyframes m-twinkle{0%,100%{opacity:0;transform:scale(.5) rotate(0deg)}45%,60%{opacity:1;transform:scale(1.15) rotate(18deg)}}
+@keyframes m-star-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+
+/* continuous excited bounce (hype mood): small real jumps with landings */
+@keyframes m-bounce{
+  0%,100%{transform:translateY(0) scale(1,1)}
+  15%{transform:translateY(1px) scale(1.06,.9)}
+  40%{transform:translateY(-7px) scale(.97,1.05)}
+  55%{transform:translateY(-8px) scale(1,1)}
+  78%{transform:translateY(0) scale(1,1)}
+  88%{transform:translateY(0) scale(1.07,.9)}
+}
+@keyframes m-shadow-bounce{
+  0%,100%{transform:scale(1);opacity:.38}
+  15%{transform:scale(1.05);opacity:.42}
+  40%,55%{transform:scale(.8);opacity:.22}
+  88%{transform:scale(1.06);opacity:.42}
+}
+
+/* ---- one-shot reactions (JS adds .m-do-<kind> to .mascot-wrap) ---- */
+/* hop: quick cheerful bounce */
+.mascot-wrap.m-do-hop .m-body{animation:m-jump-hop .5s cubic-bezier(.3,.6,.35,1) both}
+.mascot-wrap.m-do-hop .m-shadow{animation:m-shadow-hop .5s cubic-bezier(.3,.6,.35,1) both}
+@keyframes m-jump-hop{
+  0%{transform:translateY(0) scale(1,1)}
+  18%{transform:translateY(1px) scale(1.08,.88)}
+  45%{transform:translateY(-9px) scale(.96,1.07)}
+  58%{transform:translateY(-10px) scale(1,1)}
+  80%{transform:translateY(0) scale(1.09,.9)}
+  92%{transform:scale(.98,1.03)}
+  100%{transform:scale(1,1)}
+}
+@keyframes m-shadow-hop{
+  0%,100%{transform:scale(1);opacity:.38}
+  18%{transform:scale(1.06);opacity:.44}
+  45%,58%{transform:scale(.76);opacity:.2}
+  80%{transform:scale(1.08);opacity:.44}
+}
+
+/* jump: full anticipation -> launch -> hang -> land -> settle */
+.mascot-wrap.m-do-jump .m-body{animation:m-jump-big .9s cubic-bezier(.33,.1,.4,1) both}
+.mascot-wrap.m-do-jump .m-shadow{animation:m-shadow-big .9s cubic-bezier(.33,.1,.4,1) both}
+@keyframes m-jump-big{
+  0%{transform:translateY(0) scale(1,1)}
+  14%{transform:translateY(2px) scale(1.12,.82)}
+  32%{transform:translateY(-17px) scale(.92,1.12)}
+  46%{transform:translateY(-20px) scale(1,1)}
+  54%{transform:translateY(-18px) scale(1,1)}
+  68%{transform:translateY(0) scale(.98,1.04)}
+  76%{transform:translateY(1px) scale(1.14,.8)}
+  86%{transform:translateY(0) scale(.96,1.05)}
+  94%{transform:scale(1.03,.98)}
+  100%{transform:scale(1,1)}
+}
+@keyframes m-shadow-big{
+  0%,100%{transform:scale(1);opacity:.38}
+  14%{transform:scale(1.1);opacity:.46}
+  46%,54%{transform:scale(.62);opacity:.14}
+  76%{transform:scale(1.12);opacity:.46}
+}
+
+/* double: two joyful bounces, second one smaller */
+.mascot-wrap.m-do-double .m-body{animation:m-jump-double 1.2s cubic-bezier(.33,.1,.4,1) both}
+.mascot-wrap.m-do-double .m-shadow{animation:m-shadow-double 1.2s cubic-bezier(.33,.1,.4,1) both}
+@keyframes m-jump-double{
+  0%{transform:translateY(0) scale(1,1)}
+  10%{transform:translateY(2px) scale(1.12,.82)}
+  26%{transform:translateY(-16px) scale(.94,1.1)}
+  36%{transform:translateY(-18px) scale(1,1)}
+  50%{transform:translateY(0) scale(1.12,.84)}
+  64%{transform:translateY(-10px) scale(.97,1.06)}
+  72%{transform:translateY(-11px) scale(1,1)}
+  84%{transform:translateY(0) scale(1.1,.86)}
+  93%{transform:scale(.97,1.04)}
+  100%{transform:scale(1,1)}
+}
+@keyframes m-shadow-double{
+  0%,100%{transform:scale(1);opacity:.38}
+  36%{transform:scale(.66);opacity:.16}
+  50%{transform:scale(1.1);opacity:.46}
+  72%{transform:scale(.78);opacity:.22}
+  84%{transform:scale(1.08);opacity:.44}
+}
+
+/* flip: launch + full backflip at the apex (level-ups) */
+.mascot-wrap.m-do-flip .m-body{animation:m-jump-flip 1s cubic-bezier(.35,.1,.35,1) both}
+.mascot-wrap.m-do-flip .m-shadow{animation:m-shadow-big 1s cubic-bezier(.35,.1,.35,1) both}
+@keyframes m-jump-flip{
+  0%{transform:translateY(0) rotate(0) scale(1,1)}
+  12%{transform:translateY(2px) rotate(0) scale(1.14,.8)}
+  30%{transform:translateY(-20px) rotate(-140deg) scale(.95,1.05)}
+  48%{transform:translateY(-24px) rotate(-250deg) scale(1,1)}
+  66%{transform:translateY(-4px) rotate(-360deg) scale(.98,1.02)}
+  76%{transform:translateY(1px) rotate(-360deg) scale(1.16,.78)}
+  88%{transform:translateY(0) rotate(-360deg) scale(.95,1.06)}
+  100%{transform:rotate(-360deg) scale(1,1)}
+}
+
+/* respect the in-app "reduce effects" toggle */
+body.reduced-fx .mascot,body.reduced-fx .mascot *{animation:none !important}
+
+/* ============ confetti canvas ============ */
+.fx-confetti{position:fixed;inset:0;z-index:99;pointer-events:none}
