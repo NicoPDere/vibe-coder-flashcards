@@ -10,6 +10,7 @@ VCF.VERSION = '2.0.0';
 // would hide every support button in the app.
 VCF.SUPPORT_URL = 'https://buymeacoffee.com/nicopdev';
 VCF.MORE_APPS_URL = 'https://www.evergreencontent.app';
+VCF.FEEDBACK_EMAIL = 'contact@evergreencontent.app';
 
 // Preferred display order of decks on the home screen.
 VCF.DECK_ORDER = ['vibe','js','terminal','setup','swiftui','sql','python','css','react'];

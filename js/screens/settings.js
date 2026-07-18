@@ -42,6 +42,10 @@ VCF.screens.settings = {
           '<div class="set-text"><div class="set-label">How it works</div><div class="set-sub">Replay the intro tour anytime</div></div>' +
           '<button class="btn" id="btnReplayIntro">Replay</button>' +
         '</div>' +
+        '<div class="set-row">' +
+          '<div class="set-text"><div class="set-label">Send feedback</div><div class="set-sub">Bugs, deck ideas, anything — we read it all</div></div>' +
+          '<a class="btn" href="mailto:' + VCF.FEEDBACK_EMAIL + '?subject=' + encodeURIComponent('Vibe Coder Flashcards feedback (v' + VCF.VERSION + ')') + '">Email us</a>' +
+        '</div>' +
       '</div>' +
 
       (VCF.SUPPORT_URL ?
