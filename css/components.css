@@ -442,3 +442,19 @@ body.reduced-fx .mascot,body.reduced-fx .mascot *{animation:none !important}
 
 /* ============ confetti canvas ============ */
 .fx-confetti{position:fixed;inset:0;z-index:99;pointer-events:none}
+
+/* ============ touch devices: no sticky hover ============ */
+/* Touch screens keep :hover applied to the last tapped spot, which made the
+   next quiz question look pre-selected. Hover affordances are pointer-only. */
+@media (hover: none){
+  .quiz-opt:hover{border-color:var(--border);transform:none}
+  .match-tile:hover{border-color:var(--border)}
+  .deck-tile:hover{transform:none;border-color:var(--border);box-shadow:none}
+  .action-card:hover{transform:none;box-shadow:none}
+  .mode-card:hover{color:var(--dim);transform:none;border-color:var(--border);box-shadow:none}
+  .fcard:hover .fcard-face{border-color:var(--border);box-shadow:0 3px 14px rgba(0,0,0,.3)}
+  .ghost-btn:hover{background:none;color:var(--dim)}
+  .btn:hover{transform:none}
+  .btn.primary:hover{box-shadow:0 4px 18px rgba(157,123,255,.4)}
+  .pill:hover{border-color:var(--border)}
+}

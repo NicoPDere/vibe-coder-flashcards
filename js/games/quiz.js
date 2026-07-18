@@ -68,6 +68,8 @@ VCF.games.quiz = {
 
     function question(){
       answered = false;
+      // clear any lingering focus from the previous answer button
+      if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
       var item = items[idx];
       var deck = item.deck, card = item.card;
       var cat = null;
