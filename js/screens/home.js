@@ -17,6 +17,8 @@ VCF.screens.home = {
     var due = VCF.srs.dueCount(null);
     var dailyDone = s.daily.date === U.todayStr() && s.daily.done;
     var streak = VCF.game.currentStreak();
+    var mistakes = VCF.srs.mistakeQueue(15);
+    var quests = VCF.game.questsToday();
 
     var el = U.el('div', 'screen home-screen');
     el.innerHTML =
@@ -50,7 +52,19 @@ VCF.screens.home = {
           '</div>' +
           '<div class="action-go">' + VCF.ui.icons.play + '</div>' +
         '</a>' +
+        (mistakes.length ?
+        '<a class="action-card fix-card" href="#/mistakes">' +
+          '<div class="action-icn">' + VCF.ui.icons.undo + '</div>' +
+          '<div class="action-text">' +
+            '<div class="action-name">Fix your mistakes</div>' +
+            '<div class="action-sub">' + mistakes.length + ' card' + (mistakes.length === 1 ? '' : 's') + ' keep tripping you up</div>' +
+          '</div>' +
+          '<div class="action-go">' + VCF.ui.icons.play + '</div>' +
+        '</a>' : '') +
       '</div>' +
+
+      '<h2 class="section-title">Daily quests <span class="dim" id="questCount"></span></h2>' +
+      '<div class="panel quests-panel" id="questsPanel"></div>' +
 
       '<h2 class="section-title">Decks</h2>' +
       '<div class="deck-grid"></div>' +
@@ -60,6 +74,21 @@ VCF.screens.home = {
     var hm = VCF.ui.mascot(streak >= 3 ? 'hype' : 'idle', 96);
     U.$('.home-hero-mascot', el).appendChild(hm);
     setTimeout(function(){ VCF.ui.mascotReact(hm, 'hop'); }, 500);
+
+    var qp = U.$('#questsPanel', el);
+    var doneCount = quests.filter(function(q){ return q.done; }).length;
+    U.$('#questCount', el).textContent = doneCount + '/' + quests.length;
+    qp.innerHTML = quests.map(function(q){
+      var def = VCF.game.QUEST_DEFS[q.id];
+      var pct = Math.round(Math.min(1, q.progress / def.target) * 100);
+      return '<div class="quest-row' + (q.done ? ' done' : '') + '">' +
+        '<div class="quest-check">' + (q.done ? VCF.ui.icons.check : VCF.ui.icons.bolt) + '</div>' +
+        '<div class="quest-text"><b>' + U.esc(def.label) + '</b>' +
+          '<div class="bar"><div class="bar-fill" style="width:' + pct + '%;background:' +
+            (q.done ? 'var(--green)' : 'var(--grad-app)') + '"></div></div></div>' +
+        '<em>' + (q.done ? '+40 XP' : (def.target > 1 ? q.progress + '/' + def.target : '40 XP')) + '</em>' +
+      '</div>';
+    }).join('');
 
     var grid = U.$('.deck-grid', el);
     VCF.deckList().forEach(function(deck, i){

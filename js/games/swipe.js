@@ -10,7 +10,8 @@ VCF.games.swipe = {
     var deck = deckId ? VCF.decks[deckId] : null;
     if (deckId && !deck){ VCF.router.go('/home'); return; }
 
-    var queue = VCF.srs.dueQueue(deckId, SESSION);
+    var fixMode = !!(params && params.mistakes);
+    var queue = fixMode ? VCF.srs.mistakeQueue(SESSION) : VCF.srs.dueQueue(deckId, SESSION);
     var accent = deck ? deck.color : '#9d7bff';
     var reviewed = 0, knew = 0, xpEarned = 0;
     var history = []; // { item, snapshot, xp }
@@ -21,8 +22,8 @@ VCF.games.swipe = {
 
     if (!queue.length){
       frame.body.appendChild(VCF.ui.results({
-        title: 'All caught up!',
-        subtitle: 'Nothing due right now. Come back later or play a quiz.',
+        title: fixMode ? 'Nothing to fix!' : 'All caught up!',
+        subtitle: fixMode ? 'No repeat offenders in your history. Keep playing!' : 'Nothing due right now. Come back later or play a quiz.',
         mood: 'happy',
         stats: [],
         againLabel: 'Home',
@@ -192,14 +193,15 @@ VCF.games.swipe = {
       VCF.game.recordRound(deckId || (queue[0] && queue[0].deck.id));
       VCF.store.save();
       VCF.game.checkBadges('swipe-session', { reviewed: reviewed, knew: knew });
+      VCF.game.questEvent('swipe-cards', { reviewed: reviewed, knew: knew });
       if (knew >= reviewed * 0.8 && reviewed >= 10) VCF.fx.confetti({ y: 0.3 });
       VCF.audio.play('match');
 
       frame.body.innerHTML = '';
       frame.mid.innerHTML = '';
       frame.body.appendChild(VCF.ui.results({
-        title: 'Review done!',
-        subtitle: deck ? deck.name + ' swipe session' : 'Cross-deck smart review',
+        title: fixMode ? 'Mistakes faced!' : 'Review done!',
+        subtitle: fixMode ? 'Your trickiest cards, retrained' : (deck ? deck.name + ' swipe session' : 'Cross-deck smart review'),
         mood: knew >= reviewed * 0.7 ? 'hype' : 'happy',
         xp: xpEarned,
         stats: [
@@ -222,4 +224,11 @@ VCF.games.swipe = {
 
 VCF.router.register('#/deck/:id/swipe', VCF.games.swipe);
 VCF.router.register('#/review', VCF.games.swipe);
+
+// "Fix your mistakes": same engine, queue = most-fumbled cards.
+VCF.games.mistakes = {
+  mount: function(root){ VCF.games.swipe.mount(root, { mistakes: true }); },
+  unmount: function(){ VCF.games.swipe.unmount(); }
+};
+VCF.router.register('#/mistakes', VCF.games.mistakes);
 })();

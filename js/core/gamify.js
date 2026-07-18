@@ -87,11 +87,83 @@ var CHECKS = {
   'centurion':   function(s){ return VCF.srs.totals().known >= 100; }
 };
 
+// ---- daily quests ----
+// Three per day, picked deterministically from the date. Each pays 40 XP.
+var QUEST_DEFS = {
+  'xp-120':    { label: 'Earn 120 XP today', target: 120, measure: 'xp' },
+  'quiz-1':    { label: 'Finish a quiz round', target: 1, event: 'quiz-round' },
+  'daily-1':   { label: 'Complete the Daily Challenge', target: 1, event: 'daily-done' },
+  'match-win': { label: 'Win a Match game', target: 1, event: 'match-round' },
+  'speed-10':  { label: 'Know 10 in one Speed round', target: 1, event: 'speed-round', cond: function(p){ return p.known >= 10; } },
+  'swipe-15':  { label: 'Review 15 cards', target: 15, event: 'swipe-cards', countBy: function(p){ return p.reviewed || 0; } },
+  'combo-5':   { label: 'Hit a 5x quiz combo', target: 1, event: 'quiz-round', cond: function(p){ return p.bestCombo >= 5; } }
+};
+var QUEST_XP = 40;
+var questGuard = false;
+
+function daysBetween(a, b){
+  function toDate(s){ var p = s.split('-'); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  return Math.round((toDate(b) - toDate(a)) / 86400000);
+}
+
 VCF.game = {
   BADGES: BADGES,
+  QUEST_DEFS: QUEST_DEFS,
+  daysBetween: daysBetween,
   levelCost: levelCost,
   levelForXp: levelForXp,
   levelTitle: levelTitle,
+
+  // Today's quest set, (re)seeded from the local date.
+  questsToday: function(nowDate){
+    var s = VCF.store.state;
+    var today = U.todayStr(nowDate);
+    if (s.quests.date !== today){
+      var rng = U.mulberry32(U.hashStr('vcf-quests-' + today));
+      var ids = U.shuffle(Object.keys(QUEST_DEFS), rng).slice(0, 3);
+      s.quests = { date: today, items: ids.map(function(id){ return { id: id, progress: 0, done: false }; }) };
+      VCF.store.save();
+    }
+    // xp-measured quests track the day's XP live
+    s.quests.items.forEach(function(q){
+      var def = QUEST_DEFS[q.id];
+      if (def && def.measure === 'xp' && !q.done){
+        q.progress = Math.min(def.target, s.daysActive[today] || 0);
+      }
+    });
+    return s.quests.items;
+  },
+
+  // Report a gameplay event; completes matching quests (+40 XP each).
+  questEvent: function(event, payload){
+    if (questGuard) return;
+    var s = VCF.store.state;
+    var items = VCF.game.questsToday();
+    var completed = [];
+    items.forEach(function(q){
+      if (q.done) return;
+      var def = QUEST_DEFS[q.id];
+      if (!def) return;
+      if (def.measure === 'xp'){
+        if (q.progress >= def.target){ q.done = true; completed.push(q); }
+        return;
+      }
+      if (def.event !== event) return;
+      if (def.cond && !def.cond(payload || {})) return;
+      q.progress += def.countBy ? def.countBy(payload || {}) : 1;
+      if (q.progress >= def.target){ q.progress = def.target; q.done = true; completed.push(q); }
+    });
+    if (completed.length){
+      questGuard = true;
+      completed.forEach(function(q){
+        VCF.game.awardXp(QUEST_XP, 'quest:' + q.id);
+        VCF.bus.emit('quest', { id: q.id, label: QUEST_DEFS[q.id].label });
+      });
+      questGuard = false;
+    }
+    VCF.store.save();
+    return completed;
+  },
 
   multiplier: function(combo){
     if (combo >= 10) return 3;
@@ -122,22 +194,42 @@ VCF.game = {
     return { gained: n, leveledUp: after.level > before, level: after.level };
   },
 
-  touchStreak: function(){
+  touchStreak: function(nowDate){
     var s = VCF.store.state;
-    var today = U.todayStr();
+    var today = U.todayStr(nowDate);
     if (s.streak.lastDay === today) return { extended: false, current: s.streak.current };
-    if (s.streak.lastDay === U.yesterdayStr()) s.streak.current += 1;
-    else s.streak.current = 1;
+    if (s.streak.lastDay === U.yesterdayStr(nowDate)){
+      s.streak.current += 1;
+    } else if (s.streak.lastDay && s.freezes.count > 0 && daysBetween(s.streak.lastDay, today) === 2){
+      // exactly one missed day — a streak freeze saves it
+      s.freezes.count--;
+      s.freezes.usedTotal++;
+      s.streak.current += 1;
+      VCF.bus.emit('freeze-used', { current: s.streak.current, left: s.freezes.count });
+    } else {
+      s.streak.current = 1;
+      s.freezes.lastEarnedAtStreak = 0;
+    }
     s.streak.best = Math.max(s.streak.best, s.streak.current);
     s.streak.lastDay = today;
+    // earn a freeze at each 7-day milestone (carry at most 2)
+    if (s.streak.current % 7 === 0 && s.streak.current > s.freezes.lastEarnedAtStreak){
+      s.freezes.lastEarnedAtStreak = s.streak.current;
+      if (s.freezes.count < 2){
+        s.freezes.count++;
+        VCF.bus.emit('freeze-earned', { count: s.freezes.count, streak: s.streak.current });
+      }
+    }
     return { extended: true, current: s.streak.current };
   },
 
-  // Streak shown as broken if the user missed a day (lastDay before yesterday).
-  currentStreak: function(){
+  // Streak shown as alive if played today/yesterday, or if a freeze can still
+  // save a single missed day.
+  currentStreak: function(nowDate){
     var s = VCF.store.state;
     if (!s.streak.lastDay) return 0;
-    if (s.streak.lastDay === U.todayStr() || s.streak.lastDay === U.yesterdayStr()) return s.streak.current;
+    if (s.streak.lastDay === U.todayStr(nowDate) || s.streak.lastDay === U.yesterdayStr(nowDate)) return s.streak.current;
+    if (s.freezes.count > 0 && daysBetween(s.streak.lastDay, U.todayStr(nowDate)) === 2) return s.streak.current;
     return 0;
   },
 

@@ -6,7 +6,8 @@ var U = VCF.util;
 var GAME_MODES = { quiz: 1, speed: 1, swipe: 1, match: 1 };
 
 function isGameRoute(parts){
-  if (parts[0] === 'daily' || parts[0] === 'review' || parts[0] === 'welcome') return true;
+  if (parts[0] === 'daily' || parts[0] === 'review' || parts[0] === 'welcome' || parts[0] === 'mistakes') return true;
+  if (parts[0] === 'deck' && parts[2] === 'unit') return true;
   return parts[0] === 'deck' && parts.length === 3 && GAME_MODES[parts[2]];
 }
 
@@ -104,6 +105,19 @@ VCF.shell = {
         VCF.shell._pendingThanks = false;
         VCF.shell.bigThanks();
       }
+    });
+
+    VCF.bus.on('quest', function(q){
+      VCF.audio.play('badge');
+      VCF.fx.toast(VCF.ui.icons.check + ' <b>Quest done:</b> ' + q.label + ' (+40 XP)');
+    });
+    VCF.bus.on('freeze-earned', function(e){
+      VCF.audio.play('badge');
+      VCF.fx.toast(VCF.ui.icons.flame + ' <b>Streak freeze earned!</b> A missed day will not break your streak (' + e.count + ' held)');
+    });
+    VCF.bus.on('freeze-used', function(e){
+      VCF.audio.play('match');
+      VCF.fx.toast(VCF.ui.icons.flame + ' <b>Streak freeze used</b> — your ' + e.current + '-day streak survived!', { ms: 3600 });
     });
 
     VCF.bus.on('streak', function(e){

@@ -202,7 +202,10 @@ VCF.ui.zoomCard = function(deck, card){
         '<div class="prompt-text">&ldquo;' + U.esc(card.p) + '&rdquo;</div></div>' +
       '<div class="zoom-block"><div class="back-label">Example</div>' +
         '<div class="code-row"><code>' + U.esc(card.x) + '</code></div></div>' +
-      '<button class="btn primary copy-big">' + VCF.ui.icons.copy + '<span>Copy prompt</span></button>' +
+      '<div class="btn-row" style="justify-content:center">' +
+        '<button class="btn primary copy-big">' + VCF.ui.icons.copy + '<span>Copy prompt</span></button>' +
+        '<button class="btn card-share">' + VCF.ui.icons.share + ' Share card</button>' +
+      '</div>' +
     '</div>';
   document.body.appendChild(ov);
   VCF.audio.play('swoosh');
@@ -221,6 +224,9 @@ VCF.ui.zoomCard = function(deck, card){
       VCF.audio.play('pop');
       setTimeout(function(){ U.$('span', btn).textContent = 'Copy prompt'; }, 1400);
     });
+  });
+  U.$('.card-share', ov).addEventListener('click', function(){
+    VCF.fx.share(card.n + ' (' + deck.name + '): ' + card.d + ' Tell your AI: "' + card.p + '"');
   });
   return ov;
 };

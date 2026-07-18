@@ -15,6 +15,8 @@ function defaultState(){
     streak: { current: 0, best: 0, lastDay: null },
     daysActive: {},            // 'YYYY-MM-DD' -> xp earned that day
     daily: { date: null, done: false, score: 0, completions: 0, perfects: 0 },
+    quests: { date: null, items: [] },   // items: [{id, progress, done}]
+    freezes: { count: 0, lastEarnedAtStreak: 0, usedTotal: 0 },
     scores: { quizBestStreak: 0, speedBestKnown: 0, matchBestMs: null, matchNoMistakeWins: 0 },
     counters: { quizAnswers: 0, quizCorrect: 0, swipes: 0, roundsByDeck: {}, sessionsByHour: {} },
     badges: {},                 // badgeId -> unlock timestamp
@@ -50,6 +52,8 @@ VCF.store = {
     var d = defaultState();
     Object.keys(d).forEach(function(k){ if (s[k] == null) s[k] = d[k]; });
     Object.keys(d.settings).forEach(function(k){ if (s.settings[k] == null) s.settings[k] = d.settings[k]; });
+    if (!s.quests || !s.quests.items) s.quests = d.quests;
+    if (!s.freezes) s.freezes = d.freezes;
     Object.keys(d.counters).forEach(function(k){ if (s.counters[k] == null) s.counters[k] = d.counters[k]; });
     Object.keys(d.scores).forEach(function(k){ if (s.scores[k] === undefined) s.scores[k] = d.scores[k]; });
     return s;

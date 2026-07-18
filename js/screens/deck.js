@@ -31,6 +31,12 @@ VCF.screens.deck = {
         '</div>' +
       '</div>' +
 
+      '<a class="path-banner" href="#/deck/' + deck.id + '/path">' +
+        '<div class="action-icn" style="color:' + deck.color + ';background:color-mix(in srgb,' + deck.color + ' 12%,transparent)">' + VCF.ui.icons.trophy + '</div>' +
+        '<div class="action-text"><div class="action-name">Guided path</div>' +
+        '<div class="action-sub">' + deck.cats.length + ' units · unlock as you learn</div></div>' +
+        '<div class="action-go">' + VCF.ui.icons.play + '</div>' +
+      '</a>' +
       '<div class="mode-row">' +
         '<a class="mode-card" href="#/deck/' + deck.id + '/quiz">' + VCF.ui.icons.bolt + '<span>Quiz</span></a>' +
         '<a class="mode-card" href="#/deck/' + deck.id + '/speed">' + VCF.ui.icons.timer + '<span>Speed</span></a>' +

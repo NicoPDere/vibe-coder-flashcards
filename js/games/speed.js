@@ -95,6 +95,7 @@ VCF.games.speed = {
       VCF.game.recordRound(deck.id);
       VCF.store.save();
       VCF.game.checkBadges('speed-round', { known: known, seen: seen });
+      VCF.game.questEvent('speed-round', { known: known, seen: seen });
       if (known >= 15) VCF.fx.confetti({ y: 0.3 });
 
       var pct = seen ? Math.round(known / seen * 100) : 0;

@@ -12,7 +12,7 @@ VCF.SUPPORT_URL = 'https://buymeacoffee.com/nicopdev';
 VCF.MORE_APPS_URL = 'https://www.evergreencontent.app';
 
 // Preferred display order of decks on the home screen.
-VCF.DECK_ORDER = ['vibe','swiftui','sql','python','css','react'];
+VCF.DECK_ORDER = ['vibe','js','terminal','setup','swiftui','sql','python','css','react'];
 VCF.deckList = function(){
   var out = [];
   VCF.DECK_ORDER.forEach(function(id){ if (VCF.decks[id]) out.push(VCF.decks[id]); });

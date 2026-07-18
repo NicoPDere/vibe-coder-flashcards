@@ -160,6 +160,7 @@ VCF.games.quiz = {
       }
       VCF.store.save();
       VCF.game.checkBadges(opts.event || 'quiz-round', stats);
+      VCF.game.questEvent('quiz-round', stats);
 
       var pct = Math.round(score / items.length * 100);
       if (pct >= 80) VCF.fx.confetti({ y: 0.3 });
@@ -191,4 +192,31 @@ VCF.games.quiz = {
 };
 
 VCF.router.register('#/deck/:id/quiz', VCF.games.quiz);
+
+// Guided-path unit quiz: 10 questions from one category of one deck.
+VCF.games.unit = {
+  mount: function(root, params){
+    var deck = VCF.decks[params.id];
+    if (!deck){ VCF.router.go('/home'); return; }
+    var cat = null;
+    deck.cats.forEach(function(c){ if (c.id === params.cat) cat = c; });
+    if (!cat){ VCF.router.go('/deck/' + deck.id + '/path'); return; }
+    var pool = deck.cards.filter(function(c){ return c.c === cat.id; });
+    var items = U.shuffle(pool).slice(0, Math.min(10, pool.length))
+      .map(function(c){ return { deck: deck, card: c }; });
+    VCF.games.quiz.run(root, {
+      items: items,
+      accent: cat.color || deck.color,
+      title: deck.name + ' · ' + cat.label,
+      event: 'quiz-round',
+      deckId: deck.id,
+      onAgain: function(rootEl){
+        rootEl.innerHTML = '';
+        VCF.games.unit.mount(rootEl, params);
+      }
+    });
+  },
+  unmount: function(){}
+};
+VCF.router.register('#/deck/:id/unit/:cat', VCF.games.unit);
 })();

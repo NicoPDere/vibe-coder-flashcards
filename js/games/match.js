@@ -106,6 +106,7 @@ VCF.games.match = {
       VCF.game.recordRound(deck.id);
       VCF.store.save();
       VCF.game.checkBadges('match-round', { mistakes: mistakes, ms: ms });
+      VCF.game.questEvent('match-round', { mistakes: mistakes, ms: ms });
       VCF.fx.confetti({ y: 0.35 });
       VCF.audio.play('levelup');
 

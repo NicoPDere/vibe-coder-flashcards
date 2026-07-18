@@ -78,6 +78,39 @@ VCF.srs = {
     return n;
   },
 
+  // Cards the user keeps getting wrong — the "Fix your mistakes" queue.
+  mistakeQueue: function(limit){
+    limit = limit || 15;
+    var out = [];
+    VCF.deckList().forEach(function(deck){
+      deck.cards.forEach(function(card){
+        var rec = VCF.store.peek(deck.id, card.n);
+        if (rec && rec.wrong > 0 && rec.box < 5){
+          out.push({ deck: deck, card: card, wrong: rec.wrong, box: rec.box });
+        }
+      });
+    });
+    out.sort(function(a, b){ return (b.wrong - a.wrong) || (a.box - b.box); });
+    return out.slice(0, limit);
+  },
+
+  // Per-category stats inside a deck — drives the guided path.
+  catStats: function(deckId, catId){
+    var deck = VCF.decks[deckId];
+    var total = 0, known = 0, mastered = 0;
+    if (deck) deck.cards.forEach(function(card){
+      if (card.c !== catId) return;
+      total++;
+      var rec = VCF.store.peek(deckId, card.n);
+      if (rec && rec.seen > 0){
+        if (rec.box >= 3) known++;
+        if (rec.box >= 5) mastered++;
+      }
+    });
+    return { total: total, known: known, mastered: mastered,
+             pct: total ? Math.round(known / total * 100) : 0 };
+  },
+
   // Deck stats for progress UI. known = box>=3, mastered = box>=5.
   deckStats: function(deckId){
     var deck = VCF.decks[deckId];

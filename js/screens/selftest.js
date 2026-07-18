@@ -81,6 +81,59 @@ VCF.screens.selftest = {
       return s.migratedFromV1 === undefined && s.xp === 0 || 'unexpected marker/xp';
     });
 
+    // --- quests + freezes ---
+    t('daysBetween basic + month crossing', function(){
+      return VCF.game.daysBetween('2026-07-01', '2026-07-03') === 2 &&
+             VCF.game.daysBetween('2026-06-30', '2026-07-01') === 1 || 'wrong day math';
+    });
+    t('quest seed deterministic, 3 picks', function(){
+      var rng1 = U.mulberry32(U.hashStr('vcf-quests-2026-07-18'));
+      var rng2 = U.mulberry32(U.hashStr('vcf-quests-2026-07-18'));
+      var a = U.shuffle(Object.keys(VCF.game.QUEST_DEFS), rng1).slice(0, 3);
+      var b = U.shuffle(Object.keys(VCF.game.QUEST_DEFS), rng2).slice(0, 3);
+      return a.join() === b.join() && a.length === 3 || 'non-deterministic';
+    });
+    t('freeze saves a single missed day', function(){
+      var s = VCF.store.state;
+      var snap = JSON.stringify({ streak: s.streak, freezes: s.freezes });
+      s.streak = { current: 7, best: 7, lastDay: '2026-07-01' };
+      s.freezes = { count: 1, lastEarnedAtStreak: 7, usedTotal: 0 };
+      VCF.game.touchStreak(new Date(2026, 6, 3)); // played Jul 1, missed Jul 2
+      var ok = s.streak.current === 8 && s.freezes.count === 0 && s.freezes.usedTotal === 1;
+      var r = JSON.parse(snap); s.streak = r.streak; s.freezes = r.freezes;
+      return ok || 'freeze not consumed';
+    });
+    t('no freeze: gap resets streak', function(){
+      var s = VCF.store.state;
+      var snap = JSON.stringify({ streak: s.streak, freezes: s.freezes });
+      s.streak = { current: 7, best: 7, lastDay: '2026-07-01' };
+      s.freezes = { count: 0, lastEarnedAtStreak: 7, usedTotal: 0 };
+      VCF.game.touchStreak(new Date(2026, 6, 3));
+      var ok = s.streak.current === 1;
+      var r = JSON.parse(snap); s.streak = r.streak; s.freezes = r.freezes;
+      return ok || 'streak did not reset';
+    });
+    t('freeze earned at 7-day milestone', function(){
+      var s = VCF.store.state;
+      var snap = JSON.stringify({ streak: s.streak, freezes: s.freezes });
+      var now = new Date(2026, 6, 10);
+      s.streak = { current: 6, best: 6, lastDay: U.yesterdayStr(now) };
+      s.freezes = { count: 0, lastEarnedAtStreak: 0, usedTotal: 0 };
+      VCF.game.touchStreak(now);
+      var ok = s.streak.current === 7 && s.freezes.count === 1;
+      var r = JSON.parse(snap); s.streak = r.streak; s.freezes = r.freezes;
+      return ok || 'freeze not earned';
+    });
+    t('catStats sane for first deck category', function(){
+      var d = VCF.deckList()[0];
+      var st = VCF.srs.catStats(d.id, d.cats[0].id);
+      return st.total > 0 && st.known <= st.total && st.pct >= 0 && st.pct <= 100 || 'bad catStats';
+    });
+    t('mistakeQueue shape + cap', function(){
+      var q = VCF.srs.mistakeQueue(5);
+      return q.length <= 5 && q.every(function(m){ return m.deck && m.card && m.wrong > 0; }) || 'bad queue';
+    });
+
     // --- daily determinism ---
     t('daily picks are deterministic + capped', function(){
       var rng1 = U.mulberry32(U.hashStr('vcf-daily-' + U.todayStr()));
@@ -89,7 +142,7 @@ VCF.screens.selftest = {
     });
 
     // --- decks loaded ---
-    t('all 6 decks registered', function(){ return eq(VCF.deckList().length, 6); });
+    t('all 9 decks registered', function(){ return eq(VCF.deckList().length, 9); });
     t('every card has n/c/d/p/x', function(){
       var bad = 0;
       VCF.deckList().forEach(function(d){

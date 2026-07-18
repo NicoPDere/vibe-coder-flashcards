@@ -29,8 +29,8 @@ function match(parts){
 // Route depth drives the transition direction: deeper = camera pushes in
 // (zoom into a course/game), shallower = camera pulls back out.
 function depth(parts){
-  if (parts[0] === 'deck') return parts.length >= 3 ? 2 : 1;
-  if (parts[0] === 'daily' || parts[0] === 'review') return 2;
+  if (parts[0] === 'deck') return parts.length >= 4 ? 3 : parts.length === 3 ? 2 : 1;
+  if (parts[0] === 'daily' || parts[0] === 'review' || parts[0] === 'mistakes') return 2;
   return 0; // tab roots: home, stats, settings (lateral hops = fade)
 }
 

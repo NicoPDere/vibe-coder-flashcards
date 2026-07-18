@@ -56,7 +56,7 @@ VCF.screens.onboarding = {
       body.innerHTML =
         '<div class="ob-mascot"></div>' +
         '<h1 class="ob-title">Learn the words.<br><span class="grad-text">Ship the app.</span></h1>' +
-        '<p class="ob-sub">377 illustrated flashcards that make you fluent with your AI — SwiftUI, SQL, Python, CSS, React, and the art of vibe coding itself.</p>';
+        '<p class="ob-sub">' + VCF.deckList().reduce(function(n, d){ return n + d.cards.length; }, 0) + ' illustrated flashcards that make you fluent with your AI — JavaScript, Terminal, git, SwiftUI, SQL, Python, CSS, React, and the art of vibe coding itself.</p>';
       var m = VCF.ui.mascot('hype', 130);
       U.$('.ob-mascot', body).appendChild(m);
       setTimeout(function(){ VCF.ui.mascotReact(m, 'double'); }, 450);
