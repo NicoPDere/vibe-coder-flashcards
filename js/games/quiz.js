@@ -91,6 +91,15 @@ VCF.games.quiz = {
 
       refreshHead();
 
+      // A resting cursor would "hover" whatever option renders beneath it,
+      // making the new question look pre-selected. Suppress hover styling
+      // until the mouse genuinely moves.
+      var optsBox = U.$('.quiz-opts', frame.body);
+      optsBox.classList.add('no-stale-hover');
+      document.addEventListener('mousemove', function(){
+        optsBox.classList.remove('no-stale-hover');
+      }, { once: true });
+
       U.$$('.quiz-opt', frame.body).forEach(function(btn){
         btn.addEventListener('click', function(e){
           if (answered) return;

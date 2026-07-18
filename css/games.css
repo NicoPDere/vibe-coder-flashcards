@@ -51,6 +51,8 @@
 }
 .quiz-opt:hover{border-color:rgba(255,255,255,.2);transform:translateY(-1px)}
 .quiz-opt:active{transform:scale(.98)}
+/* fresh question + unmoved cursor: no phantom highlight */
+.quiz-opts.no-stale-hover .quiz-opt:hover{border-color:var(--border);transform:none}
 .quiz-opt.locked{pointer-events:none;opacity:.55}
 .quiz-opt.right{
   opacity:1;background:rgba(77,208,140,.14);border-color:var(--green);color:var(--green);
