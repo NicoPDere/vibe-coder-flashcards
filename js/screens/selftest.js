@@ -129,6 +129,25 @@ VCF.screens.selftest = {
       var st = VCF.srs.catStats(d.id, d.cats[0].id);
       return st.total > 0 && st.known <= st.total && st.pct >= 0 && st.pct <= 100 || 'bad catStats';
     });
+    t('one quiz round bumps unit progressPct', function(){
+      // simulate: every card in a category graded good once (box 1)
+      var d = VCF.deckList()[0], cat = d.cats[0];
+      var touched = [];
+      d.cards.forEach(function(c){
+        if (c.c !== cat.id) return;
+        var rec = VCF.store.card(d.id, c.n);
+        touched.push({ n: c.n, snap: JSON.stringify(rec) });
+        if (rec.seen === 0){ rec.seen = 1; rec.box = Math.max(rec.box, 1); }
+      });
+      var st = VCF.srs.catStats(d.id, cat.id);
+      var ok = st.progressPct > 0;
+      touched.forEach(function(x){
+        var rec = VCF.store.card(d.id, x.n);
+        var snap = JSON.parse(x.snap);
+        Object.keys(snap).forEach(function(k){ rec[k] = snap[k]; });
+      });
+      return ok || 'progressPct did not move after one pass';
+    });
     t('mistakeQueue shape + cap', function(){
       var q = VCF.srs.mistakeQueue(5);
       return q.length <= 5 && q.every(function(m){ return m.deck && m.card && m.wrong > 0; }) || 'bad queue';

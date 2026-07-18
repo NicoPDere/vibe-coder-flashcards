@@ -31,23 +31,26 @@ VCF.screens.path = {
     deck.cats.forEach(function(cat, i){
       var st = VCF.srs.catStats(deck.id, cat.id);
       var unlocked = i === 0 || prevPct >= UNLOCK_PCT;
-      var gold = st.pct === 100;
+      var gold = st.progressPct === 100;
       var state = gold ? 'gold' : unlocked ? 'open' : 'locked';
       var prevLabel = i > 0 ? deck.cats[i - 1].label : '';
 
       var node = U.el('button', 'path-node ' + state);
       node.style.setProperty('--nc', cat.color || deck.color);
       node.style.animationDelay = (i * 0.07) + 's';
+      var sub = gold ? st.known + '/' + st.total + ' known · unit gold!'
+        : !unlocked ? st.known + '/' + st.total + ' known · locked'
+        : st.progressPct > 0 ? st.known + '/' + st.total + ' known · ' + st.progressPct + '% learned'
+        : st.total + ' cards · start here';
       node.innerHTML =
         '<div class="path-ring">' +
-          VCF.ui.ring(st.pct, 62, gold ? '#ffd93d' : (cat.color || deck.color), st.pct + '%') +
+          VCF.ui.ring(st.progressPct, 62, gold ? '#ffd93d' : (cat.color || deck.color), st.progressPct + '%') +
           (state === 'locked' ? '<div class="path-lock">' + VCF.ui.icons.close + '</div>' : '') +
           (gold ? '<div class="path-crown">' + VCF.ui.icons.trophy + '</div>' : '') +
         '</div>' +
         '<div class="path-info">' +
           '<b>' + U.esc(cat.label) + '</b>' +
-          '<em>' + st.known + '/' + st.total + ' known' +
-            (gold ? ' · unit gold!' : unlocked ? '' : ' · locked') + '</em>' +
+          '<em>' + sub + '</em>' +
         '</div>' +
         '<div class="path-go">' + (unlocked ? VCF.ui.icons.play : '') + '</div>';
 

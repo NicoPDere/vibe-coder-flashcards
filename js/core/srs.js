@@ -95,20 +95,25 @@ VCF.srs = {
   },
 
   // Per-category stats inside a deck — drives the guided path.
+  // progressPct counts PARTIAL learning (each box step toward Known = 1/3 of a
+  // card), so every quiz round visibly moves the unit ring; pct stays the
+  // strict known-only measure.
   catStats: function(deckId, catId){
     var deck = VCF.decks[deckId];
-    var total = 0, known = 0, mastered = 0;
+    var total = 0, known = 0, mastered = 0, steps = 0;
     if (deck) deck.cards.forEach(function(card){
       if (card.c !== catId) return;
       total++;
       var rec = VCF.store.peek(deckId, card.n);
       if (rec && rec.seen > 0){
+        steps += Math.min(rec.box, 3);
         if (rec.box >= 3) known++;
         if (rec.box >= 5) mastered++;
       }
     });
     return { total: total, known: known, mastered: mastered,
-             pct: total ? Math.round(known / total * 100) : 0 };
+             pct: total ? Math.round(known / total * 100) : 0,
+             progressPct: total ? Math.round(steps / (3 * total) * 100) : 0 };
   },
 
   // Deck stats for progress UI. known = box>=3, mastered = box>=5.

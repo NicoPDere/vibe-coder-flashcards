@@ -73,6 +73,7 @@ VCF.games.match = {
         // pair!
         found++;
         VCF.srs.nudge(VCF.store.card(deck.id, t.key));
+        VCF.store.save(); // persist per pair — quitting mid-game keeps progress
         VCF.audio.play('match');
         VCF.haptics.success();
         [a.el, el].forEach(function(x){ x.classList.remove('sel'); x.classList.add('done'); });
