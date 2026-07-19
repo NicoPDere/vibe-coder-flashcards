@@ -178,12 +178,22 @@
 
 /* ============ onboarding ============ */
 .ob-screen{
-  min-height:100dvh;display:flex;flex-direction:column;
+  height:100%;display:flex;flex-direction:column;
   padding:calc(var(--sat) + 20px) 24px calc(var(--sab) + 20px) !important;
-  max-width:520px !important;
+  max-width:520px !important;margin:0 auto;
 }
-.ob-skip{align-self:flex-end;color:var(--muted)}
-.ob-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px}
+.ob-skip{align-self:flex-end;color:var(--muted);flex:none}
+/* The step content scrolls on its own so the dots + Continue stay pinned.
+   Auto margins (not justify-content:center) keep it centred when it fits and
+   fully reachable when it does not — centring alone clips the top on overflow. */
+.ob-body{
+  flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+  display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;
+  padding-bottom:2px;
+}
+.ob-body > *:first-child{margin-top:auto}
+.ob-body > *:last-child{margin-bottom:auto}
 .ob-in{animation:obIn .45s cubic-bezier(.25,1.25,.4,1) both}
 @keyframes obIn{from{opacity:0;transform:translateY(22px) scale(.96)}to{opacity:1;transform:none}}
 .ob-title{font-size:32px;line-height:1.12}
@@ -191,22 +201,30 @@
 .ob-sub{color:var(--dim);font-size:15px;max-width:380px;line-height:1.5}
 .ob-mascot{margin-bottom:6px}
 .ob-mascot-sm{margin-bottom:0}
-.ob-foot{display:flex;flex-direction:column;align-items:center;gap:16px;padding-top:16px}
+.ob-foot{
+  flex:none;display:flex;flex-direction:column;align-items:center;gap:16px;
+  padding-top:16px;position:relative;
+}
+/* soft edge so a long list reads as "scrolls under the button" */
+.ob-foot::before{
+  content:'';position:absolute;left:-24px;right:-24px;top:-26px;height:26px;
+  background:linear-gradient(transparent,var(--bg));pointer-events:none;
+}
 .ob-dots{display:flex;gap:8px}
 .ob-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.14);transition:all .3s}
 .ob-dot.on{background:var(--violet);box-shadow:0 0 8px rgba(157,123,255,.6)}
 .ob-next{width:100%;max-width:320px;padding:15px}
 
-.ob-deck-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px;width:100%;max-width:400px}
+.ob-deck-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;width:100%;max-width:400px}
 .ob-deck{
-  display:flex;flex-direction:column;align-items:center;gap:4px;
-  padding:14px 8px;border-radius:16px;
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  padding:11px 6px;border-radius:15px;
   background:var(--card);border:1.5px solid var(--border);
   transition:all .2s cubic-bezier(.3,1.3,.4,1);
-  font-family:var(--font-mono);font-weight:700;font-size:14px;
+  font-family:var(--font-mono);font-weight:700;font-size:13px;
 }
-.ob-deck em{font-style:normal;font-size:11px;color:var(--muted);font-family:var(--font-body);font-weight:500}
-.ob-deck-icon{width:40px;height:40px}
+.ob-deck em{font-style:normal;font-size:10.5px;color:var(--muted);font-family:var(--font-body);font-weight:500}
+.ob-deck-icon{width:34px;height:34px}
 .ob-deck-icon svg{width:100%;height:100%}
 .ob-deck:active{transform:scale(.94)}
 .ob-deck.sel{
