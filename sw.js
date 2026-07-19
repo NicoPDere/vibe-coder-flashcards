@@ -1,6 +1,6 @@
 // Service worker: offline-first app shell.
 // Bump CACHE_VERSION on every deploy so clients pick up new files.
-var CACHE_VERSION = 'vcf-v15';
+var CACHE_VERSION = 'vcf-v16';
 var FONT_CACHE = 'vcf-fonts-v1';
 
 var SHELL = [

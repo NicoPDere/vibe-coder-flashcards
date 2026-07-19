@@ -218,16 +218,19 @@
 .ob-dot.on{background:var(--violet);box-shadow:0 0 8px rgba(157,123,255,.6)}
 .ob-next{width:100%;max-width:320px;padding:15px}
 
-.ob-deck-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;width:100%;max-width:400px}
+/* 3 across so all nine decks fit on one screen — no scrolling, nothing clipped */
+.ob-deck-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%;max-width:420px}
 .ob-deck{
-  display:flex;flex-direction:column;align-items:center;gap:3px;
-  padding:11px 6px;border-radius:15px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  padding:10px 4px;border-radius:14px;min-height:92px;
   background:var(--card);border:1.5px solid var(--border);
   transition:all .2s cubic-bezier(.3,1.3,.4,1);
-  font-family:var(--font-mono);font-weight:700;font-size:13px;
+  font-family:var(--font-mono);font-weight:700;font-size:11.5px;line-height:1.2;
+  hyphens:none;overflow-wrap:break-word;
 }
-.ob-deck em{font-style:normal;font-size:10.5px;color:var(--muted);font-family:var(--font-body);font-weight:500}
-.ob-deck-icon{width:34px;height:34px}
+.ob-deck span{display:block;max-width:100%}
+.ob-deck em{font-style:normal;font-size:9.5px;color:var(--muted);font-family:var(--font-body);font-weight:500}
+.ob-deck-icon{width:30px;height:30px}
 .ob-deck-icon svg{width:100%;height:100%}
 .ob-deck:active{transform:scale(.94)}
 .ob-deck.sel{
