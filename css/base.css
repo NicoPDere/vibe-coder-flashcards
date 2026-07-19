@@ -88,10 +88,12 @@ body.in-game #chrome{display:none}
 .section-title{font-size:19px;margin:26px 0 12px;display:flex;align-items:center;gap:9px}
 .section-title::before{content:'';width:4px;height:17px;border-radius:2px;background:var(--grad-app);flex:none}
 
-/* scrollbar (desktop) */
-::-webkit-scrollbar{width:10px;height:10px}
-::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:5px;border:2px solid var(--bg)}
+/* scrollbar (desktop) — slim and unobtrusive, brightens on hover */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.2)}
 ::-webkit-scrollbar-track{background:transparent}
+*{scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.1) transparent}
 
 :focus-visible{outline:2px solid var(--violet);outline-offset:2px;border-radius:6px}
 
