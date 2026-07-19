@@ -29,6 +29,10 @@ VCF.screens.onboarding = {
     this._el = el;
 
     var self = this;
+    this._onResize = function(){ self.fit(); };
+    window.addEventListener('resize', this._onResize);
+    window.addEventListener('orientationchange', this._onResize);
+
     U.$('.ob-skip', el).addEventListener('click', function(){ self.finish(); });
     var lastAdvance = 0;
     U.$('#obNext', el).addEventListener('click', function(){
@@ -41,6 +45,23 @@ VCF.screens.onboarding = {
       self.render();
     });
     this.render();
+  },
+
+  // Shrink the step until it fits the screen. Safe-area insets and short
+  // phones vary enough that a fixed layout always clips somewhere, so measure
+  // and step down instead of guessing.
+  fit: function(){
+    var el = this._el;
+    if (!el) return;
+    var body = U.$('#obBody', el);
+    if (!body) return;
+    el.classList.remove('ob-compact', 'ob-compact-2', 'ob-compact-3');
+    var tiers = ['ob-compact', 'ob-compact-2', 'ob-compact-3'];
+    for (var i = 0; i < tiers.length; i++){
+      void body.offsetHeight;  // flush pending layout before measuring again
+      if (body.scrollHeight - body.clientHeight <= 1) break;
+      el.classList.add(tiers[i]);
+    }
   },
 
   render: function(){
@@ -150,6 +171,8 @@ VCF.screens.onboarding = {
       if (donate) donate.addEventListener('click', function(){ VCF.shell.noteSupportIntent(); });
       next.textContent = 'Start earning XP';
     }
+
+    this.fit();
   },
 
   finish: function(){
@@ -166,7 +189,14 @@ VCF.screens.onboarding = {
     VCF.router.go('/home');
   },
 
-  unmount: function(){ this._el = null; }
+  unmount: function(){
+    if (this._onResize){
+      window.removeEventListener('resize', this._onResize);
+      window.removeEventListener('orientationchange', this._onResize);
+      this._onResize = null;
+    }
+    this._el = null;
+  }
 };
 
 // Chosen decks float to the front of every deck list.

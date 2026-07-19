@@ -190,8 +190,10 @@
   flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;
   -webkit-overflow-scrolling:touch;
   display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;
-  padding-bottom:2px;
-  /* no scrollbar here — the peeking card + fade are the affordance */
+  /* inner breathing room: a scroll container clips at its edges, which would
+     shear the glow + scale of selected cards in the top row / right column */
+  padding:16px 12px 6px;
+  /* no scrollbar here — content is auto-fitted to the screen instead */
   scrollbar-width:none;
 }
 .ob-body::-webkit-scrollbar{display:none}
@@ -236,9 +238,40 @@
 .ob-deck.sel{
   border-color:color-mix(in srgb,var(--c1) 65%,transparent);
   background:color-mix(in srgb,var(--c1) 10%,var(--card));
-  box-shadow:0 0 18px color-mix(in srgb,var(--c1) 22%,transparent);
+  box-shadow:0 0 13px color-mix(in srgb,var(--c1) 22%,transparent);
   transform:scale(1.03);
 }
+
+/* Auto-fit: JS adds these when a step would otherwise overflow, so onboarding
+   never scrolls or clips on short screens / large safe areas. */
+.ob-compact .ob-body{gap:10px}
+.ob-compact .ob-title{font-size:26px}
+.ob-compact .ob-sub{font-size:13.5px}
+.ob-compact .ob-deck{min-height:80px;padding:8px 4px}
+.ob-compact .ob-deck-icon{width:26px;height:26px}
+.ob-compact .mascot{width:104px;height:104px}
+.ob-compact .ob-goal{padding:12px 6px}
+
+.ob-compact-2 .ob-body{gap:8px}
+.ob-compact-2 .ob-title{font-size:22px}
+.ob-compact-2 .ob-sub{font-size:12.5px;max-width:340px}
+.ob-compact-2 .ob-deck{min-height:68px;padding:6px 3px;font-size:10.5px}
+.ob-compact-2 .ob-deck em{font-size:9px}
+.ob-compact-2 .ob-deck-icon{width:22px;height:22px}
+.ob-compact-2 .mascot{width:86px;height:86px}
+.ob-compact-2 .ob-tokens span{font-size:36px}
+.ob-compact-2 .ob-fine{font-size:10px}
+
+/* last resort on the smallest screens: fine print goes, everything tightens */
+.ob-compact-3 .ob-body{gap:6px}
+.ob-compact-3 .ob-title{font-size:20px}
+.ob-compact-3 .ob-sub{font-size:11.5px;line-height:1.4}
+.ob-compact-3 .ob-fine{display:none}
+.ob-compact-3 .ob-tokens span{font-size:30px}
+.ob-compact-3 .mascot{width:72px;height:72px}
+.ob-compact-3 .ob-deck{min-height:60px;padding:5px 3px}
+.ob-compact-3 .ob-deck-icon{width:19px;height:19px}
+.ob-compact-3 .ob-goal{padding:9px 5px}
 
 .ob-goals{display:flex;gap:11px;width:100%;max-width:420px}
 .ob-goal{
