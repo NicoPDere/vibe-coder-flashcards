@@ -66,7 +66,7 @@ VCF.games.swipe = {
             '<span class="cat-chip"><span class="cat-dot" style="background:' + color + '"></span>' +
               U.esc(d.name) + (cat ? ' · ' + U.esc(cat.label) : '') + '</span>' +
             '<div class="swipe-visual" style="color:' + color + '">' + (d.visuals[c.n] || '') + '</div>' +
-            '<div class="swipe-name">' + U.esc(c.n) + '</div>' +
+            '<div class="swipe-name' + VCF.ui.nameFit(c.n) + '">' + U.esc(c.n) + '</div>' +
             '<div class="swipe-desc">' + U.esc(c.d) + '</div>' +
             '<div class="fcard-hint">tap to flip</div>' +
           '</div>' +

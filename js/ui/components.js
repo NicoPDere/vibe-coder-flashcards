@@ -33,6 +33,17 @@ VCF.ui.icons = {
   share:  ic('<circle cx="6" cy="12" r="2.6"/><circle cx="17.5" cy="5.5" r="2.6"/><circle cx="17.5" cy="18.5" r="2.6"/><path d="M8.4 10.8l6.8-4M8.4 13.2l6.8 4"/>')
 };
 
+// Card names run to 27 chars, with unbreakable identifiers up to 22
+// ("ContainerRelativeShape"). Step the type down so long names shrink to fit
+// rather than splitting mid-word.
+VCF.ui.nameFit = function(name){
+  var s = String(name || '');
+  var longestWord = s.split(/\s+/).reduce(function(m, w){ return Math.max(m, w.length); }, 0);
+  if (longestWord >= 19 || s.length >= 24) return ' n-xlong';
+  if (longestWord >= 15 || s.length >= 17) return ' n-long';
+  return '';
+};
+
 VCF.ui.TIER_COLORS = { 'new': '#5f6478', learning: '#ffd93d', known: '#57c7ff', mastered: '#4dd08c' };
 VCF.ui.TIER_LABELS = { 'new': 'New', learning: 'Learning', known: 'Known', mastered: 'Mastered' };
 
@@ -137,7 +148,7 @@ VCF.ui.flashcard = function(deck, card, opts){
         '<div class="fcard-top">' +
           '<div class="fcard-meta">' +
             '<span class="cat-chip"><span class="cat-dot" style="background:' + color + '"></span>' + U.esc(cat ? cat.label : card.c) + '</span>' +
-            '<div class="fcard-name">' + U.esc(card.n) + '</div>' +
+            '<div class="fcard-name' + VCF.ui.nameFit(card.n) + '">' + U.esc(card.n) + '</div>' +
           '</div>' +
           '<div class="fcard-visual" style="color:' + color + '">' + visual + '</div>' +
         '</div>' +
@@ -196,7 +207,7 @@ VCF.ui.zoomCard = function(deck, card){
       '<button class="ghost-btn zoom-close">' + VCF.ui.icons.close + '</button>' +
       '<div class="zoom-visual" style="color:' + color + '">' + visual + '</div>' +
       '<span class="cat-chip"><span class="cat-dot" style="background:' + color + '"></span>' + U.esc(cat ? cat.label : card.c) + '</span>' +
-      '<h2>' + U.esc(card.n) + '</h2>' +
+      '<h2 class="' + VCF.ui.nameFit(card.n).trim() + '">' + U.esc(card.n) + '</h2>' +
       '<p class="zoom-desc">' + U.esc(card.d) + '</p>' +
       '<div class="zoom-block"><div class="back-label">Say to your AI</div>' +
         '<div class="prompt-text">&ldquo;' + U.esc(card.p) + '&rdquo;</div></div>' +

@@ -34,7 +34,7 @@ VCF.games.speed = {
       frame.body.innerHTML =
         '<div class="speed-card pop-in">' +
           '<div class="speed-visual" style="color:' + color + '">' + (deck.visuals[c.n] || '') + '</div>' +
-          '<div class="speed-name">' + U.esc(c.n) + '</div>' +
+          '<div class="speed-name' + VCF.ui.nameFit(c.n) + '">' + U.esc(c.n) + '</div>' +
           '<span class="cat-chip"><span class="cat-dot" style="background:' + color + '"></span>' + U.esc(cat ? cat.label : c.c) + '</span>' +
           '<div class="speed-desc">' + U.esc(c.d) + '</div>' +
         '</div>' +

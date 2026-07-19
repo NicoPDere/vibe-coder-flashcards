@@ -21,7 +21,7 @@ VCF.games.match = {
       var cat = null;
       deck.cats.forEach(function(x){ if (x.id === c.c) cat = x; });
       var color = cat ? cat.color : deck.color;
-      tiles.push({ key: c.n, kind: 'name', html: '<div class="mt-name">' + U.esc(c.n) + '</div>', card: c });
+      tiles.push({ key: c.n, kind: 'name', html: '<div class="mt-name' + VCF.ui.nameFit(c.n) + '">' + U.esc(c.n) + '</div>', card: c });
       tiles.push({
         key: c.n, kind: 'hint',
         html: deck.visuals[c.n]

@@ -458,3 +458,10 @@ body.reduced-fx .mascot,body.reduced-fx .mascot *{animation:none !important}
   .btn.primary:hover{box-shadow:0 4px 18px rgba(157,123,255,.4)}
   .pill:hover{border-color:var(--border)}
 }
+
+/* long card names (see VCF.ui.nameFit) */
+.fcard-name.n-long{font-size:15.5px}
+.fcard-name.n-xlong{font-size:13.5px;letter-spacing:-.01em}
+.zoom-card h2.n-long{font-size:20px}
+.zoom-card h2.n-xlong{font-size:17px;letter-spacing:-.01em}
+.zoom-card h2{word-break:normal;overflow-wrap:break-word;hyphens:none}

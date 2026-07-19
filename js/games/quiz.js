@@ -85,7 +85,7 @@ VCF.games.quiz = {
           '<div class="quiz-desc">' + U.esc(card.d) + '</div>' +
         '</div>' +
         '<div class="quiz-opts">' + options(item).map(function(n){
-          return '<button class="quiz-opt" data-n="' + U.esc(n) + '">' + U.esc(n) + '</button>';
+          return '<button class="quiz-opt' + VCF.ui.nameFit(n) + '" data-n="' + U.esc(n) + '">' + U.esc(n) + '</button>';
         }).join('') + '</div>' +
         '<button class="btn primary quiz-next hidden">Next</button>';
 

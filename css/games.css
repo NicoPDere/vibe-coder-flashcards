@@ -181,3 +181,17 @@
   .quiz-desc{font-size:16px}
   .match-grid{gap:8px}
 }
+
+/* ============ long-name fitting ============ */
+/* Names reach 27 chars with unbreakable 22-char identifiers; step the type
+   down instead of letting words split mid-character. */
+.swipe-name.n-long{font-size:21px}
+.swipe-name.n-xlong{font-size:17.5px;letter-spacing:-.01em}
+.speed-name.n-long{font-size:20px}
+.speed-name.n-xlong{font-size:17px;letter-spacing:-.01em}
+.quiz-opt.n-long{font-size:14px}
+.quiz-opt.n-xlong{font-size:12.5px}
+.mt-name.n-long{font-size:12px}
+.mt-name.n-xlong{font-size:10.5px;line-height:1.25}
+/* only break inside a word as a genuine last resort */
+.swipe-name,.speed-name,.mt-name,.fcard-name{word-break:normal;overflow-wrap:break-word;hyphens:none}
