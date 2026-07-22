@@ -3,7 +3,9 @@
 // reaches 60% known. 100% known = gold. Tapping a unit starts its quiz.
 (function(){
 var U = VCF.util;
-var UNLOCK_PCT = 60;
+// One solid pass through a unit (each card answered right once = 33%) unlocks
+// the next. Gold/mastery still rewards deeper repetition.
+var UNLOCK_PCT = 30;
 
 VCF.screens.path = {
   mount: function(root, params){
@@ -56,7 +58,7 @@ VCF.screens.path = {
 
       node.addEventListener('click', function(){
         if (!unlocked){
-          VCF.fx.toast('Reach ' + UNLOCK_PCT + '% in <b>' + U.esc(prevLabel) + '</b> to unlock this unit');
+          VCF.fx.toast('Finish the <b>' + U.esc(prevLabel) + '</b> quiz to unlock this unit');
           VCF.haptics.fail();
           return;
         }
@@ -64,7 +66,9 @@ VCF.screens.path = {
       });
 
       trail.appendChild(node);
-      prevPct = st.pct;
+      // Gate on the SAME metric the ring shows, or it looks unlocked while
+      // secretly requiring extra passes.
+      prevPct = st.progressPct;
     });
 
     root.appendChild(el);
