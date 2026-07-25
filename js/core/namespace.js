@@ -12,6 +12,17 @@ VCF.SUPPORT_URL = 'https://buymeacoffee.com/nicopdev';
 VCF.MORE_APPS_URL = 'https://www.evergreencontent.app';
 VCF.FEEDBACK_EMAIL = 'contact@evergreencontent.app';
 
+// Native (Capacitor) store builds: external donation links violate store
+// payment rules (Apple 3.1.1 / Play equivalents), so blank SUPPORT_URL —
+// which hides every support button — and tag the DOM for CSS tweaks.
+// The Capacitor bridge script is injected before our deferred scripts run.
+VCF.NATIVE = !!(window.Capacitor && window.Capacitor.isNativePlatform &&
+                window.Capacitor.isNativePlatform());
+if (VCF.NATIVE){
+  VCF.SUPPORT_URL = '';
+  document.documentElement.classList.add('native-app');
+}
+
 // Preferred display order of decks on the home screen.
 VCF.DECK_ORDER = ['vibe','js','terminal','setup','swiftui','sql','python','css','react'];
 VCF.deckList = function(){

@@ -149,7 +149,7 @@ VCF.screens.onboarding = {
         '<p class="ob-sub">A vague prompt burns ~5,000 tokens in failed round-trips. Master your ' + cardCount + ' cards and that waste could add up to&hellip;</p>' +
         '<div class="ob-tokens"><span id="obTokenNum">0</span><em>tokens saved a year*</em></div>' +
         '<p class="ob-fine">*rough math: ~2 avoided re-prompts per concept, averaged over a year of building</p>' +
-        '<div class="ob-links">Free, no ads, no account &mdash; ' +
+        '<div class="ob-links">' + (VCF.NATIVE ? 'No ads, no account' : 'Free, no ads, no account') + ' &mdash; ' +
           '<button class="ob-link" id="obShare">share it with a friend</button>' +
           (VCF.SUPPORT_URL ? ' or <a class="ob-link" href="' + VCF.SUPPORT_URL + '" target="_blank" rel="noopener">buy us a coffee</a>' : '') +
           ' to keep new decks coming.</div>';

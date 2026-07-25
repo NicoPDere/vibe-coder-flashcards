@@ -45,7 +45,7 @@ if (navigator.storage && navigator.storage.persist){
 // test offline locally with http://localhost:8123/?sw=1
 var isLocalhost = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
 var wantSw = !isLocalhost || /[?&]sw=1/.test(location.search);
-if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol) && wantSw){
+if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol) && wantSw && !VCF.NATIVE){
   window.addEventListener('load', function(){
     navigator.serviceWorker.register('sw.js').catch(function(e){
       console.warn('SW registration failed', e);
