@@ -10,7 +10,8 @@ function buzz(pattern){
 VCF.haptics = {
   tap:     function(){ buzz(10); },
   success: function(){ buzz([15, 30, 15]); },
-  fail:    function(){ buzz(40); },
+  fail:    function(){ buzz([35, 55, 35]); },
+  soft:    function(){ buzz(6); },
   heavy:   function(){ buzz([10, 20, 40]); }
 };
 })();

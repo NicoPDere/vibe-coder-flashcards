@@ -59,6 +59,7 @@ VCF.games.speed = {
         seen++; qi++;
         VCF.srs.grade(VCF.store.card(deck.id, c.n), 'hard');
         VCF.audio.play('swoosh');
+        VCF.haptics.soft();
         card();
       });
     }

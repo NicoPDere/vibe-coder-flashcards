@@ -104,7 +104,7 @@ VCF.games.swipe = {
       VCF.game.awardXp(gained, 'swipe');
       history.push({ item: item, snapshot: snapshot, xp: gained, dir: dir });
       if (dir > 0){ knew++; VCF.audio.play('correct'); VCF.haptics.tap(); }
-      else { VCF.audio.play('swoosh'); }
+      else { VCF.audio.play('swoosh'); VCF.haptics.soft(); }
       VCF.store.save();
       reviewed++;
       if (reviewed >= queue.length) setTimeout(end, 260);
