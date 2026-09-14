@@ -49,7 +49,7 @@ var BADGES = [
     icon: bi('<path d="M32 8a16 16 0 108 22A14 14 0 0132 8z" fill="currentColor" opacity=".55"/><circle cx="34" cy="14" r="1.5" fill="currentColor"/><circle cx="40" cy="20" r="1" fill="currentColor"/>') },
   { id:'early-bird', name:'Early Bird', desc:'Finish a round between 5am and 8am',
     icon: bi('<circle cx="24" cy="30" r="10" fill="currentColor" opacity=".55"/><path d="M6 34h36M10 26l3 3M38 26l-3 3M24 14v4" stroke="currentColor" stroke-width="2" opacity=".5"/>') },
-  { id:'tourist', name:'Deck Tourist', desc:'Play a round in all 6 decks',
+  { id:'tourist', name:'Deck Tourist', desc:'Play a round in 6 different decks',
     icon: bi('<circle cx="24" cy="24" r="16" stroke="currentColor" stroke-width="2" opacity=".4"/><path d="M8 24h32M24 8c6 6 6 26 0 32-6-6-6-26 0-32z" stroke="currentColor" stroke-width="1.5" opacity=".5"/>') },
   { id:'daily-devotee', name:'Daily Devotee', desc:'Complete 10 daily challenges',
     icon: bi('<rect x="8" y="10" width="32" height="30" rx="4" stroke="currentColor" stroke-width="2" opacity=".4"/><path d="M8 18h32M16 6v8M32 6v8" stroke="currentColor" stroke-width="2" opacity=".4"/><path d="M17 28l5 5 9-9" stroke="currentColor" stroke-width="2.5" opacity=".8"/>') },
@@ -77,7 +77,9 @@ var CHECKS = {
   'month-streak':function(s){ return s.streak.current >= 30; },
   'night-owl':   function(s, ev){ if (!/round|session|daily|match/.test(ev)) return false; var h = new Date().getHours(); return h >= 0 && h < 5; },
   'early-bird':  function(s, ev){ if (!/round|session|daily|match/.test(ev)) return false; var h = new Date().getHours(); return h >= 5 && h < 8; },
-  'tourist':     function(s){ var by = s.counters.roundsByDeck; return VCF.deckList().every(function(d){ return (by[d.id] || 0) > 0; }); },
+  // Text said 6 decks but the rule demanded every deck; with 13 decks that
+  // would be a slog. Now it means what it says.
+  'tourist':     function(s){ var by = s.counters.roundsByDeck; return VCF.deckList().filter(function(d){ return (by[d.id] || 0) > 0; }).length >= 6; },
   'daily-devotee': function(s){ return s.daily.completions >= 10; },
   'perfect-day': function(s, ev, p){ return ev === 'daily-round' && p.score === p.total && p.total >= 10; },
   'matchmaker':  function(s, ev, p){ return ev === 'match-round' && p.mistakes === 0; },

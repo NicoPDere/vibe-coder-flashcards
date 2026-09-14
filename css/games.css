@@ -191,6 +191,9 @@
 .speed-name.n-xlong{font-size:17px;letter-spacing:-.01em}
 .quiz-opt.n-long{font-size:14px}
 .quiz-opt.n-xlong{font-size:12.5px}
+/* prompt-pick mode: options are whole prompt sentences, not names */
+.quiz-opt.p-opt{font-family:var(--font-body);font-weight:600;font-size:14px;line-height:1.35;letter-spacing:0}
+.quiz-hint{font-size:12px;color:var(--dim);margin-top:8px;text-align:center}
 .mt-name.n-long{font-size:12px}
 .mt-name.n-xlong{font-size:10.5px;line-height:1.25}
 /* only break inside a word as a genuine last resort */
