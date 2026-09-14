@@ -161,7 +161,7 @@ VCF.screens.selftest = {
     });
 
     // --- decks loaded ---
-    t('all 9 decks registered', function(){ return eq(VCF.deckList().length, 9); });
+    t('all 13 decks registered', function(){ return eq(VCF.deckList().length, 13); });
     t('every card has n/c/d/p/x', function(){
       var bad = 0;
       VCF.deckList().forEach(function(d){

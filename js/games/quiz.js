@@ -21,7 +21,9 @@ function options(item){
   var others = deck.cards.filter(function(c){ return c.n !== card.n && c.c !== card.c; });
   var wrong = U.shuffle(sameCat).slice(0, 3);
   if (wrong.length < 3) wrong = wrong.concat(U.shuffle(others).slice(0, 3 - wrong.length));
-  return U.shuffle([card].concat(wrong)).map(function(c){ return c.n; });
+  // Returns card objects: the caller decides whether to show names (quiz)
+  // or prompt lines (prompt-pick). Correctness is always checked by name.
+  return U.shuffle([card].concat(wrong));
 }
 
 VCF.games.quiz = {
@@ -46,6 +48,9 @@ VCF.games.quiz = {
   run: function(root, opts){
     var items = opts.items;
     var idx = 0, score = 0, combo = 0, bestCombo = 0, xpEarned = 0, answered = false;
+    // Prompt-pick: same round, but the options are each card's "say to your
+    // AI" line instead of its name. Trains the skill rather than recall.
+    var promptMode = opts.mode === 'prompt';
 
     var frame = VCF.ui.gameFrame({ accent: opts.accent || '#9d7bff' });
     root.appendChild(frame.root);
@@ -82,10 +87,13 @@ VCF.games.quiz = {
           '<div class="quiz-visual" style="color:' + color + '">' + visual + '</div>' +
           '<span class="cat-chip"><span class="cat-dot" style="background:' + color + '"></span>' +
             U.esc(deck.name) + (cat ? ' · ' + U.esc(cat.label) : '') + '</span>' +
-          '<div class="quiz-desc">' + U.esc(card.d) + '</div>' +
+          '<div class="quiz-desc">' + (promptMode ? '<b>' + U.esc(card.n) + '</b> — ' : '') + U.esc(card.d) + '</div>' +
+          (promptMode ? '<div class="quiz-hint">Which prompt gets this done?</div>' : '') +
         '</div>' +
-        '<div class="quiz-opts">' + options(item).map(function(n){
-          return '<button class="quiz-opt' + VCF.ui.nameFit(n) + '" data-n="' + U.esc(n) + '">' + U.esc(n) + '</button>';
+        '<div class="quiz-opts">' + options(item).map(function(c){
+          var label = promptMode ? c.p : c.n;
+          var cls = promptMode ? ' p-opt' : VCF.ui.nameFit(c.n);
+          return '<button class="quiz-opt' + cls + '" data-n="' + U.esc(c.n) + '">' + U.esc(label) + '</button>';
         }).join('') + '</div>' +
         '<button class="btn primary quiz-next hidden">Next</button>';
 
@@ -201,6 +209,29 @@ VCF.games.quiz = {
 };
 
 VCF.router.register('#/deck/:id/quiz', VCF.games.quiz);
+
+// Prompt Pick: the situation is shown, the four options are prompt lines.
+// Reuses the quiz round wholesale (scoring, combo, SRS grading, quests).
+VCF.games.prompt = {
+  mount: function(root, params){
+    var deck = VCF.decks[params.id];
+    if (!deck){ VCF.router.go('/home'); return; }
+    VCF.games.quiz.run(root, {
+      items: pickRound(deck),
+      accent: deck.color,
+      title: deck.name + ' Prompt Pick',
+      event: 'quiz-round',
+      deckId: deck.id,
+      mode: 'prompt',
+      onAgain: function(rootEl){
+        rootEl.innerHTML = '';
+        VCF.games.prompt.mount(rootEl, params);
+      }
+    });
+  },
+  unmount: function(){}
+};
+VCF.router.register('#/deck/:id/prompt', VCF.games.prompt);
 
 // Guided-path unit quiz: 10 questions from one category of one deck.
 VCF.games.unit = {

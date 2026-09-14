@@ -1,6 +1,6 @@
 // Service worker: offline-first app shell.
 // Bump CACHE_VERSION on every deploy so clients pick up new files.
-var CACHE_VERSION = 'vcf-v21';
+var CACHE_VERSION = 'vcf-v22';
 var FONT_CACHE = 'vcf-fonts-v1';
 
 var SHELL = [
@@ -34,6 +34,10 @@ var SHELL = [
   './js/games/daily.js',
   './js/app.js',
   './data/deck-vibe.js',
+  './data/deck-prompt.js',
+  './data/deck-llm.js',
+  './data/deck-tools.js',
+  './data/deck-pitfalls.js',
   './data/deck-js.js',
   './data/deck-terminal.js',
   './data/deck-setup.js',

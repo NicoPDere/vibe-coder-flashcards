@@ -42,6 +42,7 @@ VCF.screens.deck = {
         '<a class="mode-card" href="#/deck/' + deck.id + '/speed">' + VCF.ui.icons.timer + '<span>Speed</span></a>' +
         '<a class="mode-card" href="#/deck/' + deck.id + '/swipe">' + VCF.ui.icons.swipe + '<span>Swipe</span></a>' +
         '<a class="mode-card" href="#/deck/' + deck.id + '/match">' + VCF.ui.icons.grid + '<span>Match</span></a>' +
+        '<a class="mode-card" href="#/deck/' + deck.id + '/prompt">' + VCF.ui.icons.sparkle + '<span>Prompt</span></a>' +
       '</div>' +
 
       '<div class="browse-tools">' +

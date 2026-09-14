@@ -6,11 +6,11 @@
 
 **Learn the words. Ship the app.**
 
-543 illustrated flashcards that make you fluent with your AI — the vocabulary, prompts, and workflows behind AI-assisted development.
+718 illustrated flashcards that make you fluent with your AI — the vocabulary, prompts, and workflows behind AI-assisted development.
 
 [**▶ Open the app**](https://cards.evergreencontent.app) · [Buy me a coffee ☕](https://buymeacoffee.com/nicopdev)
 
-`543 cards` · `9 decks` · `5 game modes` · installable PWA · works offline · zero dependencies
+`718 cards` · `13 decks` · `6 game modes` · installable PWA · works offline · zero dependencies
 
 </div>
 
@@ -22,7 +22,7 @@ A learning app for "vibe coders" — beginners, designers, and indie hackers who
 
 Every card has four parts: the concept, a plain-English description, **the prompt to say to your AI**, and a copy-paste example.
 
-**Decks:** Vibe Coding · JavaScript · Terminal · Dev Setup (environments + real git workflows) · SwiftUI · SQL · Python · CSS · React
+**Decks:** Vibe Coding · Prompt Craft · How LLMs Work · AI Coding Tools · AI Failure Modes · JavaScript · Terminal · Dev Setup (environments + real git workflows) · SwiftUI · SQL · Python · CSS · React
 
 ## Why it exists
 
@@ -31,6 +31,7 @@ A vague prompt burns thousands of tokens in failed round-trips before it lands. 
 ## How you learn
 
 - **Quiz** — multiple choice with combo multipliers
+- **Prompt Pick** — read the situation, choose the prompt you would actually say to your AI
 - **Speed** — how many can you nail in 60 seconds?
 - **Swipe** — Tinder-style review that feeds a spaced-repetition scheduler
 - **Match** — pair concepts with their illustrations against the clock
@@ -47,7 +48,7 @@ The interesting part, if you're here to look at the engineering:
 - **Everything on-device.** All progress lives in a single `localStorage` key. No accounts, no server, no analytics, no tracking — the app has no backend of its own.
 - **Offline-first PWA.** A service worker precaches the whole shell; once loaded it runs with the network unplugged. Installs to the home screen and launches fullscreen like a native app.
 - **Synthesized audio.** Every sound — flips, combos, level-up fanfares — is generated live with the Web Audio API. Zero audio files ship.
-- **Hand-drawn everything.** All 543 card illustrations, deck icons, badges, and the animated mascot are inline SVG. The one raster asset is the app icon.
+- **Hand-drawn everything.** All 718 card illustrations, deck icons, badges, and the animated mascot are inline SVG. The one raster asset is the app icon.
 - **A hidden self-test** at `#/selftest` runs 38 logic assertions (SRS transitions, streak/date math, save migration, quest seeding) in the browser — the app checks its own core logic on demand.
 
 ## Architecture
