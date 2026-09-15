@@ -29,6 +29,17 @@
 .review-card{border-color:rgba(157,123,255,.28)}
 .review-card .action-icn{color:var(--violet);background:rgba(157,123,255,.1)}
 .review-card:hover{border-color:rgba(157,123,255,.5)}
+.store-card{position:relative;cursor:pointer;border-color:rgba(255,122,200,.28);padding-right:44px}
+.store-card .action-icn{color:var(--pink);background:rgba(255,122,200,.1)}
+.store-card:hover{border-color:rgba(255,122,200,.5)}
+.nudge-x{
+  position:absolute;top:6px;right:6px;width:30px;height:30px;border:0;border-radius:50%;
+  background:transparent;color:var(--muted);font-size:20px;line-height:30px;cursor:pointer;padding:0;
+}
+.nudge-x:hover{background:rgba(255,255,255,.07);color:var(--text)}
+.store-row{flex-wrap:wrap}
+.store-btns{flex:1 0 100%;display:flex;gap:8px;margin-top:2px}
+.store-btns .btn{flex:1;justify-content:center}
 .action-icn{
   width:46px;height:46px;border-radius:14px;flex:none;
   display:grid;place-items:center;

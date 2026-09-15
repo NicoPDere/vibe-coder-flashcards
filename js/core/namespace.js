@@ -12,6 +12,22 @@ VCF.SUPPORT_URL = 'https://buymeacoffee.com/nicopdev';
 VCF.MORE_APPS_URL = 'https://www.evergreencontent.app';
 VCF.FEEDBACK_EMAIL = 'contact@evergreencontent.app';
 
+// Store listings of the native builds. The web app is free and complete; the
+// apps add reminders, haptics and streak alerts. Links are hidden inside the
+// apps themselves (VCF.NATIVE) — a store link inside a store build is noise.
+VCF.STORE_URLS = {
+  ios: 'https://apps.apple.com/app/id6794836223',
+  android: 'https://play.google.com/store/apps/details?id=app.evergreencontent.cards'
+};
+// 'ios' | 'android' | 'desktop'. iPadOS reports itself as a Mac, hence the
+// touch-point check.
+VCF.platform = function(){
+  var ua = navigator.userAgent || '';
+  if (/android/i.test(ua)) return 'android';
+  if (/iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1)) return 'ios';
+  return 'desktop';
+};
+
 // Native (Capacitor) store builds: external donation links violate store
 // payment rules (Apple 3.1.1 / Play equivalents), so blank SUPPORT_URL —
 // which hides every support button — and tag the DOM for CSS tweaks.
