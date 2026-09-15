@@ -8,7 +8,7 @@
 
 718 illustrated flashcards that make you fluent with your AI — the vocabulary, prompts, and workflows behind AI-assisted development.
 
-[**▶ Open the app**](https://cards.evergreencontent.app) · [Buy me a coffee ☕](https://buymeacoffee.com/nicopdev)
+[**▶ Open the app**](https://cards.evergreencontent.app) · [App Store](https://apps.apple.com/app/id6794836223) · [Google Play](https://play.google.com/store/apps/details?id=app.evergreencontent.cards) · [Buy me a coffee ☕](https://buymeacoffee.com/nicopdev)
 
 `718 cards` · `13 decks` · `6 game modes` · installable PWA · works offline · zero dependencies
 

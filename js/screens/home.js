@@ -2,6 +2,12 @@
 (function(){
 var U = VCF.util;
 
+// One-time "get the app" card for phone browsers. Waits until the visitor has
+// actually earned XP here — a store pitch on first load is just a wall.
+var NUDGE_KEY = 'vcf-store-nudge';
+function nudgeDismissed(){ try { return localStorage.getItem(NUDGE_KEY) === '1'; } catch(e){ return true; } }
+function dismissNudge(){ try { localStorage.setItem(NUDGE_KEY, '1'); } catch(e){} }
+
 function greeting(){
   var h = new Date().getHours();
   if (h < 5) return 'Late night vibes';
@@ -19,6 +25,9 @@ VCF.screens.home = {
     var streak = VCF.game.currentStreak();
     var mistakes = VCF.srs.mistakeQueue(15);
     var quests = VCF.game.questsToday();
+    var plat = VCF.platform();
+    var showNudge = !VCF.NATIVE && plat !== 'desktop' && s.xp > 0 && !nudgeDismissed();
+    var storeUrl = showNudge ? VCF.STORE_URLS[plat] : '';
 
     var el = U.el('div', 'screen home-screen');
     el.innerHTML =
@@ -61,6 +70,16 @@ VCF.screens.home = {
           '</div>' +
           '<div class="action-go">' + VCF.ui.icons.play + '</div>' +
         '</a>' : '') +
+        (showNudge ?
+        '<div class="action-card store-card" id="storeNudge" role="link" tabindex="0">' +
+          '<div class="action-icn">' + VCF.ui.icons.sparkle + '</div>' +
+          '<div class="action-text">' +
+            '<div class="action-name">Get the app</div>' +
+            '<div class="action-sub">Reminders, haptics and streak alerts — on ' + (plat === 'ios' ? 'the App Store' : 'Google Play') + '</div>' +
+          '</div>' +
+          '<div class="action-go">' + VCF.ui.icons.play + '</div>' +
+          '<button class="nudge-x" id="storeNudgeX" aria-label="Dismiss">&times;</button>' +
+        '</div>' : '') +
       '</div>' +
 
       '<h2 class="section-title">Daily quests <span class="dim" id="questCount"></span></h2>' +
@@ -89,6 +108,17 @@ VCF.screens.home = {
         '<em>' + (q.done ? '+40 XP' : (def.target > 1 ? q.progress + '/' + def.target : '40 XP')) + '</em>' +
       '</div>';
     }).join('');
+
+    var nudge = U.$('#storeNudge', el);
+    if (nudge){
+      U.$('#storeNudgeX', el).addEventListener('click', function(e){
+        e.stopPropagation(); dismissNudge(); nudge.remove(); VCF.haptics.tap();
+      });
+      nudge.addEventListener('click', function(){ dismissNudge(); window.open(storeUrl, '_blank', 'noopener'); });
+      nudge.addEventListener('keydown', function(e){
+        if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); nudge.click(); }
+      });
+    }
 
     var grid = U.$('.deck-grid', el);
     VCF.deckList().forEach(function(deck, i){

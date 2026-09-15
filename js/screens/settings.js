@@ -2,6 +2,16 @@
 (function(){
 var U = VCF.util;
 
+// Web only: point at the store builds. Inside the apps this row is hidden.
+function storeButtons(){
+  var p = VCF.platform(), u = VCF.STORE_URLS;
+  if (p === 'ios') return '<a class="btn primary" href="' + u.ios + '" target="_blank" rel="noopener">App Store</a>';
+  if (p === 'android') return '<a class="btn primary" href="' + u.android + '" target="_blank" rel="noopener">Google Play</a>';
+  return '<div class="store-btns">' +
+    '<a class="btn" href="' + u.ios + '" target="_blank" rel="noopener">App Store</a>' +
+    '<a class="btn" href="' + u.android + '" target="_blank" rel="noopener">Google Play</a></div>';
+}
+
 function toggleRow(id, label, sub, on){
   return '<div class="set-row">' +
     '<div class="set-text"><div class="set-label">' + label + '</div><div class="set-sub">' + sub + '</div></div>' +
@@ -46,6 +56,11 @@ VCF.screens.settings = {
           '<div class="set-text"><div class="set-label">Send feedback</div><div class="set-sub">Bugs, deck ideas, anything — we read it all</div></div>' +
           '<a class="btn" href="mailto:' + VCF.FEEDBACK_EMAIL + '?subject=' + encodeURIComponent('Vibe Coder Flashcards feedback (v' + VCF.VERSION + ')') + '">Email us</a>' +
         '</div>' +
+        (VCF.NATIVE ? '' :
+        '<div class="set-row store-row">' +
+          '<div class="set-text"><div class="set-label">Get the app</div><div class="set-sub">Reminders, haptics and streak alerts, on your home screen</div></div>' +
+          storeButtons() +
+        '</div>') +
       '</div>' +
 
       (VCF.SUPPORT_URL ?
