@@ -123,13 +123,27 @@ VCF.screens.settings = {
     U.$('#btnImport', el).addEventListener('click', function(){
       var raw = U.$('#backupBox', el).value.trim();
       if (!raw){ VCF.fx.toast('Paste a backup into the box first'); return; }
+      var saved;
       try {
-        VCF.store.importJson(raw);
-        VCF.fx.toast('Progress restored!');
-        VCF.shell.refreshHud();
+        saved = VCF.store.importJson(raw);
       } catch(e){
-        VCF.fx.toast('That does not look like a valid backup', { cls: 'toast-bad' });
+        VCF.fx.toast(e instanceof SyntaxError
+          ? 'That backup is cut off or was changed. Copy all of it and paste it again.'
+          : 'That is not a backup from this app. Paste the text you got from Export progress.',
+          { cls: 'toast-bad', ms: 4200 });
+        return;
       }
+      // Apply the restored settings and deck order, then redraw from Home so
+      // every screen shows the restored progress.
+      var st = VCF.store.state;
+      document.body.classList.toggle('reduced-fx', !!st.settings.reducedFx);
+      if (st.onboarding && st.onboarding.decks && st.onboarding.decks.length) VCF.applyDeckOrder(st.onboarding.decks);
+      VCF.shell.refreshHud();
+      VCF.fx.toast(saved
+        ? 'Progress restored!'
+        : 'Progress restored for now, but this browser would not save it. It will be gone when you close the app.',
+        saved ? {} : { cls: 'toast-bad', ms: 4200 });
+      VCF.router.go('/home');
     });
 
     var resetArmed = false;

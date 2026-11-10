@@ -89,6 +89,8 @@ VCF.router = {
     window.addEventListener('hashchange', render);
     render();
   },
-  currentPath: function(){ return parseHash().join('/'); }
+  currentPath: function(){ return parseHash().join('/'); },
+  // For selftest: [{ parts: ['deck', ':id', 'quiz'], screen }]
+  routeList: function(){ return routes.slice(); }
 };
 })();

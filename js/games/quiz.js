@@ -82,12 +82,15 @@ VCF.games.quiz = {
       var color = cat ? cat.color : deck.color;
       var visual = deck.visuals[card.n] || '';
 
+      // Both modes show only the description. Prompt Pick used to add the
+      // card's name, but the right prompt usually contains that name, so it
+      // gave the answer away.
       frame.body.innerHTML =
         '<div class="quiz-q">' +
           '<div class="quiz-visual" style="color:' + color + '">' + visual + '</div>' +
           '<span class="cat-chip"><span class="cat-dot" style="background:' + color + '"></span>' +
             U.esc(deck.name) + (cat ? ' · ' + U.esc(cat.label) : '') + '</span>' +
-          '<div class="quiz-desc">' + (promptMode ? '<b>' + U.esc(card.n) + '</b> — ' : '') + U.esc(card.d) + '</div>' +
+          '<div class="quiz-desc">' + U.esc(card.d) + '</div>' +
           (promptMode ? '<div class="quiz-hint">Which prompt gets this done?</div>' : '') +
         '</div>' +
         '<div class="quiz-opts">' + options(item).map(function(c){

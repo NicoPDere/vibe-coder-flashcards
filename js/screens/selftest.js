@@ -8,7 +8,9 @@ VCF.screens.selftest = {
     function t(name, fn){
       try {
         var ok = fn();
-        results.push({ name: name, ok: !!ok, err: ok === true ? '' : String(ok) });
+        // Only a literal true passes. Tests report a failure by returning a
+        // message string, which is truthy, so !!ok used to count it as a pass.
+        results.push({ name: name, ok: ok === true, err: ok === true ? '' : String(ok) });
       } catch(e){
         results.push({ name: name, ok: false, err: e.message });
       }
@@ -154,10 +156,69 @@ VCF.screens.selftest = {
     });
 
     // --- daily determinism ---
+    function dailyKey(items){
+      return items.map(function(it){ return it.deck.id + '/' + it.card.n; }).join('|');
+    }
     t('daily picks are deterministic + capped', function(){
-      var rng1 = U.mulberry32(U.hashStr('vcf-daily-' + U.todayStr()));
-      var rng2 = U.mulberry32(U.hashStr('vcf-daily-' + U.todayStr()));
-      return eq(rng1() + '', rng2() + '');
+      var a = VCF.games.daily._todaysItems('2026-11-09');
+      var b = VCF.games.daily._todaysItems('2026-11-09');
+      if (a.length !== 10) return 'got ' + a.length + ' cards, expected 10';
+      if (dailyKey(a) !== dailyKey(b)) return 'same day gave different cards';
+      var per = {};
+      a.forEach(function(it){ per[it.deck.id] = (per[it.deck.id] || 0) + 1; });
+      return Object.keys(per).every(function(k){ return per[k] <= 2; }) || 'more than 2 cards from one deck';
+    });
+    t('daily is the same whatever deck order you picked', function(){
+      var order = VCF.DECK_ORDER, a, b;
+      a = dailyKey(VCF.games.daily._todaysItems(U.todayStr()));
+      VCF.DECK_ORDER = order.slice().reverse();
+      try { b = dailyKey(VCF.games.daily._todaysItems(U.todayStr())); }
+      finally { VCF.DECK_ORDER = order; }
+      return a === b || 'deck order changed the daily cards';
+    });
+
+    // --- backup: export -> import (writes real storage, then puts the
+    // original state back) ---
+    t('import restores an older backup (round trip)', function(){
+      var original = VCF.store.exportJson();
+      var b = JSON.parse(original), err = '';
+      b.xp = (b.xp || 0) + 1234;
+      b.progress.__selftest = { Probe: { box: 3, due: 0, last: 0, seen: 1, right: 1, wrong: 0 } };
+      b.updatedAt = 1; // a backup is always older than this device's last save
+      try {
+        var saved = VCF.store.importJson(JSON.stringify(b));
+        var s = VCF.store.state, stored = JSON.parse(localStorage.getItem('vcf2'));
+        if (s.xp !== b.xp) err = 'xp ' + s.xp + ' after import, expected ' + b.xp;
+        else if (!(s.progress.__selftest && s.progress.__selftest.Probe.box === 3)) err = 'card progress not restored';
+        else if (!saved || !stored || stored.xp !== b.xp) err = 'import not saved to storage';
+      } finally {
+        VCF.store.importJson(original);
+      }
+      if (err) return err;
+      var back = VCF.store.state;
+      return back.xp === JSON.parse(original).xp && !back.progress.__selftest || 'original progress not put back';
+    });
+    t('import rejects cut-off or foreign text', function(){
+      var before = VCF.store.exportJson(), errs = [];
+      var cut = before.slice(0, Math.floor(before.length / 2));
+      try { VCF.store.importJson(cut); errs.push('accepted a cut-off backup'); }
+      catch(e){ if (!(e instanceof SyntaxError)) errs.push('cut-off backup not reported as cut off'); }
+      ['null', '{"hello":"world"}', '{"v":2}'].forEach(function(bad){
+        try { VCF.store.importJson(bad); errs.push('accepted ' + bad); } catch(e){}
+      });
+      if (VCF.store.exportJson() !== before) errs.push('progress changed');
+      return errs.length === 0 ? true : errs.join('; ');
+    });
+
+    // --- routes ---
+    t('every game route hides the HUD + tab bar', function(){
+      var games = Object.keys(VCF.games).map(function(k){ return VCF.games[k]; });
+      var bad = VCF.router.routeList().filter(function(r){
+        if (games.indexOf(r.screen) === -1) return false;
+        var parts = r.parts.map(function(p){ return p[0] === ':' ? 'x' : p; });
+        return !VCF.shell.isGameRoute(parts);
+      }).map(function(r){ return '#/' + r.parts.join('/'); });
+      return bad.length === 0 ? true : 'not in GAME_MODES: ' + bad.join(', ');
     });
 
     // --- decks loaded ---

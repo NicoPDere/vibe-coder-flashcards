@@ -111,8 +111,10 @@ VCF.fx = {
     var url = (VCF.NATIVE || !/^https?:$/.test(location.protocol) || /localhost|127\.0\.0\.1/.test(location.hostname))
       ? 'https://cards.evergreencontent.app'
       : location.href.split('#')[0];
-    var cardCount = VCF.deckList().reduce(function(n, d){ return n + d.cards.length; }, 0) || 543;
-    text = text || ('Learning to build with AI — ' + cardCount + ' flashcards, streaks and a very bouncy robot.');
+    // Count the cards that actually shipped; no hard-coded fallback (an old
+    // one said 543). If the decks somehow failed to load, leave the number out.
+    var cardCount = VCF.deckList().reduce(function(n, d){ return n + d.cards.length; }, 0);
+    text = text || ('Learning to build with AI — ' + (cardCount ? cardCount + ' ' : '') + 'flashcards, streaks and a very bouncy robot.');
     if (navigator.share){
       navigator.share({ title: 'Vibe Coder Flashcards', text: text, url: url }).catch(function(){});
     } else {

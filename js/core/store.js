@@ -135,12 +135,24 @@ VCF.store = {
 
   exportJson: function(){ return JSON.stringify(VCF.store.state); },
 
+  // Throws on bad input (caller catches): a SyntaxError when the text is not
+  // whole JSON, a plain Error when it is JSON but not a backup. Returns true
+  // when the restore was saved on this device, false when the browser
+  // refused to store it (it then only lasts until the app is closed).
   importJson: function(str){
-    var s = JSON.parse(str); // caller catches
-    if (!s || s.v !== 2 || typeof s.progress !== 'object') throw new Error('Not a valid backup');
+    var s = JSON.parse(str);
+    if (!s || s.v !== 2 || !s.progress || typeof s.progress !== 'object') throw new Error('Not a valid backup');
+    // Stamp the backup as the newest save. A backup is always older than this
+    // device's own last save, so the stale-tab guard in _flush would
+    // otherwise put the old progress back and silently drop the import.
+    var cur = 0;
+    try { cur = (JSON.parse(localStorage.getItem(KEY)) || {}).updatedAt || 0; } catch(e){}
+    s.updatedAt = Math.max(Date.now(), cur + 1);
     VCF.store.state = VCF.store._fill(s);
     VCF.store.save(true);
-    return true;
+    var saved = null;
+    try { saved = JSON.parse(localStorage.getItem(KEY)); } catch(e){}
+    return !!(saved && saved.updatedAt === VCF.store.state.updatedAt && saved.xp === VCF.store.state.xp);
   },
 
   resetAll: function(){

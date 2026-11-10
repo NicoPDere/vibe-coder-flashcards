@@ -1,6 +1,6 @@
 // Service worker: offline-first app shell.
 // Bump CACHE_VERSION on every deploy so clients pick up new files.
-var CACHE_VERSION = 'vcf-v23';
+var CACHE_VERSION = 'vcf-v24';
 var FONT_CACHE = 'vcf-fonts-v1';
 
 var SHELL = [
@@ -50,15 +50,15 @@ var SHELL = [
 ];
 
 // Nice-to-have: cached individually so a missing file can't fail the install.
+// Left out on purpose: landing.html and its 1.5 MB mascot image (the app never
+// shows them) and assets/og-image.png (only link-preview crawlers fetch it).
 var OPTIONAL = [
   './assets/icons/favicon.png',
   './assets/icons/icon-192.png',
   './assets/icons/icon-512.png',
   './assets/icons/icon-512-maskable.png',
   './assets/icons/apple-touch-icon.png',
-  './landing.html',
   './privacy.html',
-  './assets/mascot/mascot-hero-1024.png',
   './swiftui-flashcards.html',
   './sql-flashcards.html',
   './python-flashcards.html',

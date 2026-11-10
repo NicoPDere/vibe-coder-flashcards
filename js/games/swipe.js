@@ -79,11 +79,26 @@ VCF.games.swipe = {
       return el;
     }
 
+    // The card is a fixed height and can't scroll (dragging it is the game),
+    // so if a long prompt plus a wrapped or multi-line example would spill
+    // past the bottom of the back face, step the text down until it fits.
+    // offsetTop/offsetHeight ignore the flip and stack transforms.
+    function fitBack(el){
+      var back = U.$('.swipe-back', el);
+      for (var step = 1; back && back.lastElementChild && step <= 3; step++){
+        var last = back.lastElementChild;
+        var padBottom = parseFloat(getComputedStyle(back).paddingBottom) || 0;
+        if (last.offsetTop + last.offsetHeight <= back.clientHeight - padBottom + 1) return;
+        back.classList.add('fit-' + step);
+      }
+    }
+
     function renderStack(){
       stack.innerHTML = '';
       for (var i = Math.min(queue.length - 1, reviewed + 2); i >= reviewed; i--){
         var el = cardEl(queue[i], i - reviewed);
         stack.appendChild(el);
+        fitBack(el);
       }
       var top = stack.lastElementChild;
       if (top) attachDrag(top);

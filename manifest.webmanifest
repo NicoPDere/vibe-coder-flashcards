@@ -1,7 +1,7 @@
 {
-  "name": "Vibe Coder Flashcards",
+  "name": "Vibe Coder: AI Flashcards",
   "short_name": "Vibe Cards",
-  "description": "377 illustrated flashcards for AI-assisted development — SwiftUI, SQL, Python, CSS, React, and the art of vibe coding itself.",
+  "description": "718 illustrated flashcards on the words, prompts and mistakes of AI coding tools. Made for beginners. Works offline, no account needed.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

@@ -4,11 +4,17 @@
 var U = VCF.util;
 var SIZE = 10, MAX_PER_DECK = 2;
 
-function todaysItems(){
-  var rng = U.mulberry32(U.hashStr('vcf-daily-' + U.todayStr()));
+// day: optional 'YYYY-MM-DD' (selftest); defaults to today.
+function todaysItems(day){
+  var rng = U.mulberry32(U.hashStr('vcf-daily-' + (day || U.todayStr())));
   var perDeck = {};
   var pool = [];
-  VCF.deckList().forEach(function(deck){
+  // Walk the decks in a fixed order (sorted ids), never the user's display
+  // order: onboarding moves the decks you picked to the front, and that
+  // would change which cards the seed lands on. Same day = same 10 cards
+  // for everyone.
+  Object.keys(VCF.decks).sort().forEach(function(id){
+    var deck = VCF.decks[id];
     var cards = U.shuffle(deck.cards, rng);
     cards.forEach(function(c, i){ pool.push({ deck: deck, card: c, order: rng() }); });
   });
@@ -54,7 +60,8 @@ VCF.games.daily = {
       }
     });
   },
-  unmount: function(){}
+  unmount: function(){},
+  _todaysItems: todaysItems // exposed for selftest
 };
 
 VCF.router.register('#/daily', VCF.games.daily);

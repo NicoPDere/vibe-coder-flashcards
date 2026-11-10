@@ -123,15 +123,18 @@
   display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));
   gap:14px;margin-top:14px;
 }
-.fcard-wrap{perspective:1200px;animation:fadeUp .4s ease both}
+.fcard-wrap{perspective:1200px;animation:fadeUp .4s ease both;min-width:0}
+/* Both faces share one grid cell, so the card grows to fit the taller face
+   (long prompt + wrapped or multi-line example) instead of spilling out. */
 .fcard{
   position:relative;min-height:220px;height:100%;
+  display:grid;grid-template-columns:minmax(0,1fr);
   transform-style:preserve-3d;transition:transform .55s cubic-bezier(.3,.9,.35,1);
   cursor:pointer;
 }
 .fcard.flipped{transform:rotateY(180deg)}
 .fcard-face{
-  position:absolute;inset:0;
+  grid-area:1/1;min-width:0;
   backface-visibility:hidden;-webkit-backface-visibility:hidden;
   background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
   padding:18px;display:flex;flex-direction:column;
@@ -159,11 +162,17 @@
   font-size:14.5px;line-height:1.5;color:var(--text);
   font-style:italic;flex:1;
 }
+/* Examples wrap instead of scrolling sideways (a sideways scroll hid most of
+   the example on phones). pre-wrap keeps real line breaks and indentation
+   for multi-line code; anywhere breaks long unbroken strings like URLs. */
 .code-row{
   background:rgba(0,0,0,.32);border:1px solid var(--border);border-radius:10px;
-  padding:10px 12px;margin-top:10px;overflow-x:auto;
+  padding:10px 12px;margin-top:10px;text-align:left;
 }
-.code-row code{white-space:pre;font-size:12px;color:var(--cyan)}
+.code-row code{
+  display:block;white-space:pre-wrap;overflow-wrap:break-word;overflow-wrap:anywhere;
+  font-size:12px;line-height:1.5;color:var(--cyan);
+}
 .copy-btn.copied,.copy-btn.copied span{color:var(--green)}
 .no-results{color:var(--muted);padding:40px 0;text-align:center;grid-column:1/-1}
 

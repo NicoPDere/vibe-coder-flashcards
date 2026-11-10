@@ -3,7 +3,9 @@
 (function(){
 var U = VCF.util;
 
-var GAME_MODES = { quiz: 1, speed: 1, swipe: 1, match: 1 };
+// Every '#/deck/:id/<mode>' game must be listed here, or the HUD and tab bar
+// stay on top of it (selftest checks this against the registered routes).
+var GAME_MODES = { quiz: 1, speed: 1, swipe: 1, match: 1, prompt: 1 };
 
 function isGameRoute(parts){
   if (parts[0] === 'daily' || parts[0] === 'review' || parts[0] === 'welcome' || parts[0] === 'mistakes') return true;
@@ -12,6 +14,8 @@ function isGameRoute(parts){
 }
 
 VCF.shell = {
+  isGameRoute: isGameRoute, // exposed for selftest
+
   init: function(){
     var chrome = U.el('div', '', '');
     chrome.id = 'chrome';

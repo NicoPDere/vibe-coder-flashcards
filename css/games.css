@@ -109,13 +109,25 @@
   text-align:center;gap:10px;
   box-shadow:0 14px 40px rgba(0,0,0,.5);
 }
-.swipe-back{transform:rotateY(180deg);background:var(--card-2);justify-content:center}
+/* flex-start (not center): the prompt line already fills the free space, and
+   if a long example ever overflows, the top of the card stays readable */
+.swipe-back{transform:rotateY(180deg);background:var(--card-2);justify-content:flex-start}
 .swipe-visual{width:110px;height:110px}
 .swipe-visual svg{width:100%;height:100%}
 .swipe-name{font-family:var(--font-mono);font-weight:700;font-size:26px;word-break:break-word}
 .swipe-desc{font-size:15px;color:var(--dim);max-width:320px}
 .swipe-back .prompt-text{font-size:16px}
 .swipe-back .code-row{width:100%}
+/* The swipe card has a fixed height and can't scroll (it owns the drag
+   gesture). swipe.js adds fit-1..fit-3 when a long prompt plus a wrapped or
+   multi-line example would not fit, stepping the text down one size each. */
+.swipe-back.fit-1{padding:20px;gap:8px}
+.swipe-back.fit-1 .prompt-text{font-size:14.5px}
+.swipe-back.fit-2 .prompt-text{font-size:13.5px}
+.swipe-back.fit-2 .code-row code{font-size:11px}
+.swipe-back.fit-3{padding:16px;gap:6px}
+.swipe-back.fit-3 .prompt-text{font-size:12.5px;line-height:1.4}
+.swipe-back.fit-3 .code-row code{font-size:10.5px;line-height:1.4}
 .swipe-stamp{
   position:absolute;top:18%;z-index:5;pointer-events:none;opacity:0;
   font-family:var(--font-display);font-weight:700;font-size:30px;letter-spacing:.1em;
