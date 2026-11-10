@@ -77,7 +77,7 @@ VCF.screens.onboarding = {
       body.innerHTML =
         '<div class="ob-mascot"></div>' +
         '<h1 class="ob-title">Learn the words.<br><span class="grad-text">Ship the app.</span></h1>' +
-        '<p class="ob-sub">' + VCF.deckList().reduce(function(n, d){ return n + d.cards.length; }, 0) + ' illustrated flashcards that make you fluent with your AI — prompting, how LLMs work, AI coding tools, plus JavaScript, Terminal, git, SwiftUI, SQL, Python, CSS, React, and the art of vibe coding itself.</p>';
+        '<p class="ob-sub">' + VCF.deckList().reduce(function(n, d){ return n + d.cards.length; }, 0) + ' illustrated flashcards that make you fluent with your AI: prompting, how LLMs work, AI coding tools, plus JavaScript, Terminal, git, SwiftUI, SQL, Python, CSS, React, and the art of vibe coding itself.</p>';
       var m = VCF.ui.mascot('hype', 130);
       U.$('.ob-mascot', body).appendChild(m);
       setTimeout(function(){ VCF.ui.mascotReact(m, 'double'); }, 450);
@@ -87,7 +87,7 @@ VCF.screens.onboarding = {
     if (this._step === 1){
       body.innerHTML =
         '<h1 class="ob-title">What are you building?</h1>' +
-        '<p class="ob-sub">Pick the decks you care about — they go front and center. You can play all of them anytime.</p>' +
+        '<p class="ob-sub">Pick the decks you care about. They go front and center. You can play all of them anytime.</p>' +
         '<div class="ob-deck-grid"></div>';
       var grid = U.$('.ob-deck-grid', body);
       VCF.deckList().forEach(function(deck){
@@ -115,7 +115,7 @@ VCF.screens.onboarding = {
       ];
       body.innerHTML =
         '<h1 class="ob-title">How hard do we vibe?</h1>' +
-        '<p class="ob-sub">Streaks are kind here — one round a day keeps the flame alive.</p>' +
+        '<p class="ob-sub">Streaks are kind here. One round a day keeps the flame alive.</p>' +
         '<div class="ob-goals"></div>';
       var wrap = U.$('.ob-goals', body);
       goals.forEach(function(g){

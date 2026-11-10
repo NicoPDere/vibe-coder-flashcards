@@ -52,7 +52,7 @@ VCF.games.daily = {
           VCF.game.questEvent('daily-done', stats);
           return { xp: 100, subtitle: 'Daily complete! +100 XP bonus' };
         }
-        return { xp: 0, subtitle: 'Practice run — bonus already claimed today' };
+        return { xp: 0, subtitle: 'Practice run. You already got today\'s bonus' };
       },
       onAgain: function(rootEl){
         rootEl.innerHTML = '';

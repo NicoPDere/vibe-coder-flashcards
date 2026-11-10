@@ -53,7 +53,7 @@ VCF.screens.settings = {
           '<button class="btn" id="btnReplayIntro">Replay</button>' +
         '</div>' +
         '<div class="set-row">' +
-          '<div class="set-text"><div class="set-label">Send feedback</div><div class="set-sub">Bugs, deck ideas, anything — we read it all</div></div>' +
+          '<div class="set-text"><div class="set-label">Send feedback</div><div class="set-sub">Bugs, deck ideas, anything. We read it all</div></div>' +
           '<a class="btn" href="mailto:' + VCF.FEEDBACK_EMAIL + '?subject=' + encodeURIComponent('Vibe Coder Flashcards feedback (v' + VCF.VERSION + ')') + '">Email us</a>' +
         '</div>' +
         (VCF.NATIVE ? '' :
@@ -67,11 +67,11 @@ VCF.screens.settings = {
         '<h2 class="section-title">Support</h2>' +
         '<div class="panel"><div class="set-row">' +
           (s.supported
-            ? '<div class="set-text"><div class="set-label">You supported the app — THANK YOU!</div>' +
+            ? '<div class="set-text"><div class="set-label">You supported the app. THANK YOU!</div>' +
               '<div class="set-sub">You keep it free for everyone and help us build <a class="ob-link" href="' + VCF.MORE_APPS_URL + '" target="_blank" rel="noopener">more useful apps</a></div></div>' +
               '<a class="btn" id="btnSupport" href="' + VCF.SUPPORT_URL + '" target="_blank" rel="noopener">' + VCF.ui.icons.sparkle + ' Again?</a>'
             : '<div class="set-text"><div class="set-label">Love the app?</div>' +
-              '<div class="set-sub">Pay what you want — it keeps new decks coming and helps us build more useful apps</div></div>' +
+              '<div class="set-sub">Pay what you want. It keeps new decks coming and helps us build more useful apps</div></div>' +
               '<a class="btn primary" id="btnSupport" href="' + VCF.SUPPORT_URL + '" target="_blank" rel="noopener">' + VCF.ui.icons.sparkle + ' Support</a>') +
         '</div></div>' : '') +
 
@@ -116,7 +116,7 @@ VCF.screens.settings = {
       var json = VCF.store.exportJson();
       U.$('#backupBox', el).value = json;
       U.copyText(json).then(function(ok){
-        VCF.fx.toast(ok ? 'Backup copied to clipboard' : 'Backup ready below — copy it manually');
+        VCF.fx.toast(ok ? 'Backup copied to clipboard' : 'Backup ready below. Copy it yourself');
       });
     });
 

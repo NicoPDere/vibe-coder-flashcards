@@ -46,7 +46,7 @@ VCF.screens.home = {
           '<div class="action-text">' +
             '<div class="action-name">Daily Challenge</div>' +
             '<div class="action-sub">' + (dailyDone
-              ? 'Done — ' + s.daily.score + '/10 today. Back tomorrow!'
+              ? 'Done. ' + s.daily.score + '/10 today. Back tomorrow!'
               : '10 mixed cards · +100 XP bonus') + '</div>' +
           '</div>' +
           '<div class="action-go">' + VCF.ui.icons.play + '</div>' +
@@ -56,7 +56,7 @@ VCF.screens.home = {
           '<div class="action-text">' +
             '<div class="action-name">Smart Review</div>' +
             '<div class="action-sub">' + (due
-              ? due + ' card' + (due === 1 ? '' : 's') + ' due — swipe through them'
+              ? due + ' card' + (due === 1 ? '' : 's') + ' due. Swipe through them'
               : 'Nothing due. Swipe some new cards?') + '</div>' +
           '</div>' +
           '<div class="action-go">' + VCF.ui.icons.play + '</div>' +
@@ -75,7 +75,7 @@ VCF.screens.home = {
           '<div class="action-icn">' + VCF.ui.icons.sparkle + '</div>' +
           '<div class="action-text">' +
             '<div class="action-name">Get the app</div>' +
-            '<div class="action-sub">Reminders, haptics and streak alerts — on ' + (plat === 'ios' ? 'the App Store' : 'Google Play') + '</div>' +
+            '<div class="action-sub">Reminders, haptics and streak alerts, on ' + (plat === 'ios' ? 'the App Store' : 'Google Play') + '</div>' +
           '</div>' +
           '<div class="action-go">' + VCF.ui.icons.play + '</div>' +
           '<button class="nudge-x" id="storeNudgeX" aria-label="Dismiss">&times;</button>' +

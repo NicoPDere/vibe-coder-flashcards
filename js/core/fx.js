@@ -114,12 +114,12 @@ VCF.fx = {
     // Count the cards that actually shipped; no hard-coded fallback (an old
     // one said 543). If the decks somehow failed to load, leave the number out.
     var cardCount = VCF.deckList().reduce(function(n, d){ return n + d.cards.length; }, 0);
-    text = text || ('Learning to build with AI — ' + (cardCount ? cardCount + ' ' : '') + 'flashcards, streaks and a very bouncy robot.');
+    text = text || ('Learning to build with AI: ' + (cardCount ? cardCount + ' ' : '') + 'flashcards, streaks and a very bouncy robot.');
     if (navigator.share){
       navigator.share({ title: 'Vibe Coder Flashcards', text: text, url: url }).catch(function(){});
     } else {
       VCF.util.copyText(text + ' ' + url).then(function(ok){
-        VCF.fx.toast(ok ? '<b>Link copied!</b> Send it to a friend' : 'Could not copy — the app URL is in your address bar');
+        VCF.fx.toast(ok ? '<b>Link copied!</b> Send it to a friend' : 'Could not copy. The app link is in your address bar');
       });
     }
     VCF.audio.play('pop');

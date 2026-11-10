@@ -316,7 +316,7 @@ VCF.ui.results = function(opts){
   U.$('.res-share', el).addEventListener('click', function(){
     VCF.fx.share(opts.shareText || ('I just scored ' +
       (opts.stats && opts.stats[0] ? opts.stats[0].value : '') +
-      ' on Vibe Coder Flashcards — learning to build with AI, one card at a time.'));
+      ' on Vibe Coder Flashcards. Learning to build with AI, one card at a time.'));
   });
   return el;
 };

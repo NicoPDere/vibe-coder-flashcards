@@ -121,7 +121,7 @@ VCF.shell = {
     });
     VCF.bus.on('freeze-used', function(e){
       VCF.audio.play('match');
-      VCF.fx.toast(VCF.ui.icons.flame + ' <b>Streak freeze used</b> — your ' + e.current + '-day streak survived!', { ms: 3600 });
+      VCF.fx.toast(VCF.ui.icons.flame + ' <b>Streak freeze used.</b> Your ' + e.current + '-day streak survived!', { ms: 3600 });
     });
 
     VCF.bus.on('streak', function(e){

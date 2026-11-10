@@ -124,7 +124,7 @@ VCF.games.match = {
         stats: [
           { value: U.fmtMs(ms), label: 'Time', color: '#57c7ff' },
           { value: mistakes, label: 'Misses', color: mistakes ? '#ff5c72' : '#4dd08c' },
-          { value: s.scores.matchBestMs != null ? U.fmtMs(s.scores.matchBestMs) : '—', label: 'Best time' }
+          { value: s.scores.matchBestMs != null ? U.fmtMs(s.scores.matchBestMs) : '-', label: 'Best time' }
         ],
         onAgain: function(){
           root.innerHTML = '';

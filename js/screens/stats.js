@@ -66,7 +66,7 @@ VCF.screens.stats = {
       '<div class="panel records">' +
         '<div class="rec-row"><span>Best quiz combo</span><b>×' + s.scores.quizBestStreak + '</b></div>' +
         '<div class="rec-row"><span>Speed round best</span><b>' + s.scores.speedBestKnown + ' known</b></div>' +
-        '<div class="rec-row"><span>Fastest match</span><b>' + (s.scores.matchBestMs != null ? U.fmtMs(s.scores.matchBestMs) : '—') + '</b></div>' +
+        '<div class="rec-row"><span>Fastest match</span><b>' + (s.scores.matchBestMs != null ? U.fmtMs(s.scores.matchBestMs) : '-') + '</b></div>' +
         '<div class="rec-row"><span>Daily challenges</span><b>' + s.daily.completions + ' done · ' + s.daily.perfects + ' perfect</b></div>' +
         '<div class="rec-row"><span>Lifetime swipes</span><b>' + s.counters.swipes + '</b></div>' +
         '<div class="rec-row"><span>Streak freezes held</span><b>' + s.freezes.count + '/2 · ' + s.freezes.usedTotal + ' used</b></div>' +
